@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner() {
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/owners/$(request.auth.uid));
+    }
+    function shopee(u) {
+      return u is string && u.matches('^https://([a-z0-9-]+\\.)*(shopee\\.[a-z.]+|shope\\.ee|shp\\.ee)(/.*)?$');
+    }
+    match /owners/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+    match /products/{id} {
+      allow read: if resource.data.active == true || isOwner();
+      allow create, update: if isOwner()
+        && request.resource.data.name is string && request.resource.data.name.size() <= 200
+        && request.resource.data.price is number && request.resource.data.price >= 0
+        && shopee(request.resource.data.affiliateUrl);
+      allow delete: if isOwner();
+    }
+    match /banners/{id} {
+      allow read: if resource.data.active == true || isOwner();
+      allow write: if isOwner();
+    }
+    match /categories/{id} { allow read: if true; allow write: if isOwner(); }
+    match /settings/{id} { allow read: if true; allow write: if isOwner(); }
+  }
+}
