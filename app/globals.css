@@ -198,3 +198,23 @@ body:has(.buybar) .ftr{padding-bottom:72px}
 .cat:hover{box-shadow:0 4px 12px rgba(244,81,30,.15);border-color:var(--o)}
 .cat img,.ico{width:38px;height:38px}.ico{font-size:1.3rem}
 @media(min-width:1100px){.catgrid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}}
+
+/* ===== v9: galeri foto produk (maks 5) gaya Shopee ===== */
+.g-track{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.g-track::-webkit-scrollbar{display:none}
+.g-slide{flex:0 0 100%;height:100%;scroll-snap-align:center;scroll-snap-stop:always}
+.g-count{position:absolute;right:10px;bottom:10px;z-index:2;background:rgba(0,0,0,.55);color:#fff;border-radius:999px;padding:2px 10px;font-size:.75rem;font-weight:600}
+.g-nav,.g-thumbs{display:none}
+@media(min-width:800px){
+  .d-img{position:relative;top:auto}.d-gal{position:sticky;top:130px}
+  .g-nav{display:grid;place-items:center;position:absolute;top:50%;transform:translateY(-50%);width:34px;height:54px;border:0;background:rgba(0,0,0,.38);color:#fff;font-size:1.7rem;cursor:pointer;z-index:2;opacity:0;transition:opacity .2s}
+  .d-img:hover .g-nav{opacity:1}.g-nav.prev{left:0;border-radius:0 6px 6px 0}.g-nav.next{right:0;border-radius:6px 0 0 6px}
+  .g-thumbs{display:flex;gap:8px;margin-top:10px}
+  .g-thumbs button{flex:1;max-width:84px;aspect-ratio:1;border:2px solid transparent;padding:0;border-radius:6px;overflow:hidden;background:#eee;cursor:pointer}
+  .g-thumbs button.on,.g-thumbs button:hover{border-color:var(--o)}.g-thumbs img{width:100%;height:100%;object-fit:cover}
+}
+/* uploader multi-foto (admin) */
+.mi{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}.mi-it{position:relative;width:76px}.mi-it img{width:76px;height:76px;object-fit:cover;border-radius:8px;display:block}
+.mi-main{position:absolute;top:3px;left:3px;background:var(--o);color:#fff;font-size:.6rem;padding:0 5px;border-radius:4px}
+.mi-act{display:flex;justify-content:space-between;margin-top:3px}.mi-act button{border:0;background:#f0f0f0;border-radius:4px;width:22px;height:22px;cursor:pointer;font-size:.8rem;padding:0}.mi-act button:disabled{opacity:.35;cursor:default}
+.mi-add{width:76px;height:76px;border:2px dashed var(--o);border-radius:8px;background:#fff8f4;color:var(--o);font-size:1.8rem;cursor:pointer}
