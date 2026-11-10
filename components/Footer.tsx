@@ -1,9 +1,12 @@
 'use client';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useSite } from './SiteProvider';
 
 export default function Footer() {
   const { settings: s } = useSite();
+  const path = usePathname();
+  if (path?.startsWith('/admin')) return null;
   const wa = s.whatsapp.replace(/\D/g, '');
   const socials = [['Instagram', s.instagram], ['Facebook', s.facebook], ['TikTok', s.tiktok], ['YouTube', s.youtube]].filter(([, u]) => u);
   return (
@@ -21,7 +24,7 @@ export default function Footer() {
           {socials.map(([n, u]) => <a key={n} href={u} target="_blank" rel="noopener noreferrer">{n}</a>)}
         </div>
       </div>
-      <p className="wrap copy">© {new Date().getFullYear()} {s.siteName}</p>
+      <p className="wrap copy">© {new Date().getFullYear()} {s.siteName}. Kami dapat menerima komisi afiliasi dari pembelian melalui tautan Shopee.</p>
     </footer>
   );
 }

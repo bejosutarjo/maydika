@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useSite } from './SiteProvider';
 import Img from './Img';
@@ -8,7 +8,9 @@ import Img from './Img';
 export default function Header() {
   const { settings, categories } = useSite();
   const router = useRouter();
+  const path = usePathname();
   const [q, setQ] = useState('');
+  if (path?.startsWith('/admin')) return null;
   return (
     <header className="hdr">
       <div className="wrap hdr-in">
