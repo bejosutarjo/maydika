@@ -6,11 +6,12 @@ import { TikTokIcon } from './PlatformIcons';
 import { FacebookIcon, InstagramIcon, WhatsAppIcon, YouTubeIcon } from './SocialIcons';
 
 export default function Footer() {
-  const { settings: s, categories } = useSite();
+  const { settings: s } = useSite();
   const path = usePathname();
   if (path?.startsWith('/admin') || path?.startsWith('/produk/')) return null;
   const wa = s.whatsapp.replace(/\D/g, '');
   const socials = [
+    { n: 'WhatsApp', u: wa ? `https://wa.me/${wa}` : '', i: <WhatsAppIcon /> },
     { n: 'Instagram', u: s.instagram, i: <InstagramIcon /> },
     { n: 'Facebook', u: s.facebook, i: <FacebookIcon /> },
     { n: 'TikTok', u: s.tiktok, i: <TikTokIcon /> },
@@ -18,35 +19,21 @@ export default function Footer() {
   ].filter((x) => x.u);
   return (
     <footer className="ftr">
-      <div className="wrap f-grid">
-        <div className="f-brand">
-          <h4>Tentang Kami</h4>
-          {s.description && <p className="f-desc">{s.description}</p>}
-          <div className="f-safe"><span>🛡️ Transaksi di Shopee &amp; TikTok Shop</span><span>🔗 Link resmi</span></div>
-          {(socials.length > 0 || wa) && (
-            <div className="soc" aria-label="Media sosial">
-              {wa && <a href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><WhatsAppIcon /></a>}
-              {socials.map((x) => <a key={x.n} href={x.u} target="_blank" rel="noopener noreferrer" aria-label={x.n}>{x.i}</a>)}
-            </div>
-          )}
-        </div>
-        <div className="f-col">
-          <h4>Jelajahi</h4>
+      <div className="wrap f-simple">
+        <nav className="f-links" aria-label="Footer">
           <Link href="/">Beranda</Link>
-          <Link href="/?sec=terbaru">Produk Terbaru</Link>
-          <Link href="/populer">Produk Populer</Link>
+          <Link href="/populer">Populer</Link>
           <Link href="/rekomendasi">Rekomendasi</Link>
           <Link href="/syarat">Syarat &amp; Ketentuan</Link>
-        </div>
-        {categories.length > 0 && (
-          <div className="f-col">
-            <h4>Kategori</h4>
-            {categories.slice(0, 6).map((c) => <Link key={c.id} href={`/?cat=${c.id}`}>{c.icon} {c.name}</Link>)}
+        </nav>
+        {socials.length > 0 && (
+          <div className="soc" aria-label="Media sosial">
+            {socials.map((x) => <a key={x.n} href={x.u} target="_blank" rel="noopener noreferrer" aria-label={x.n}>{x.i}</a>)}
           </div>
         )}
-        {wa && <div className="f-brand"><a className="f-wa" href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer"><WhatsAppIcon /> Chat via WhatsApp</a></div>}
+        {s.description && <p className="f-desc">{s.description}</p>}
       </div>
-      <div className="copy"><p>© {new Date().getFullYear()} {s.siteName}. Kami dapat menerima komisi afiliasi dari pembelian melalui tautan Shopee &amp; TikTok Shop.</p></div>
+      <div className="copy"><p>© {new Date().getFullYear()} {s.siteName}</p></div>
     </footer>
   );
 }
