@@ -8,6 +8,14 @@ service cloud.firestore {
     function shopee(u) {
       return u is string && u.matches('^https://([a-z0-9-]+\\.)*(shopee\\.[a-z.]+|shope\\.ee|shp\\.ee)(/.*)?$');
     }
+    function tiktok(u) {
+      return u is string && u.matches('^https://([a-z0-9-]+\\.)*(tiktok\\.com|tiktokshop\\.com|tokopedia\\.com|tokopedia\\.link)(/.*)?$');
+    }
+    function okLinks(d) {
+      let s = d.get('affiliateUrl', '');
+      let t = d.get('tiktokUrl', '');
+      return (s == '' || shopee(s)) && (t == '' || tiktok(t)) && (s != '' || t != '');
+    }
     match /owners/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;
       allow write: if false;
@@ -17,7 +25,7 @@ service cloud.firestore {
       allow create, update: if isOwner()
         && request.resource.data.name is string && request.resource.data.name.size() <= 200
         && request.resource.data.price is number && request.resource.data.price >= 0
-        && shopee(request.resource.data.affiliateUrl);
+        && okLinks(request.resource.data);
       allow delete: if isOwner();
     }
     match /banners/{id} {
