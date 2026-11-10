@@ -6,7 +6,7 @@ import { byNewest, listCol } from '@/lib/db';
 import { Product } from '@/lib/types';
 import ProductCard from './ProductCard';
 import BannerSlider from './BannerSlider';
-import Img from './Img';
+import CategoryStrip from './CategoryStrip';
 import { useSite } from './SiteProvider';
 
 const TITLES: Record<string, string> = { terbaru: 'Produk Terbaru', populer: 'Produk Populer', rekomendasi: 'Produk Rekomendasi' };
@@ -53,18 +53,7 @@ export default function HomeClient() {
         <Link href="/populer" className="q"><span>🔥</span><div><b>Produk Populer</b><small>Produk favorit</small></div></Link>
         <Link href="/rekomendasi" className="q q2"><span>⭐</span><div><b>Rekomendasi</b><small>Pilihan terbaik kami</small></div></Link>
       </div>
-      {categories.length > 0 && (
-        <section className="wrap sec"><h2>Kategori</h2>
-          <div className="catgrid">
-            {categories.map((c) => (
-              <Link key={c.id} href={`/?cat=${c.id}`} className="cat">
-                {c.image ? <Img src={c.image} alt="" w={160} sizes="64px" /> : <span className="ico">{c.icon || '🛍️'}</span>}
-                <span>{c.name}</span>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
+      <CategoryStrip />
       {failed && <p className="wrap err">Gagal memuat data. Periksa konfigurasi Firebase dan Firestore Rules.</p>}
       {!all.length && !failed && <p className="wrap muted sec">Belum ada produk. Owner dapat menambahkannya lewat /admin.</p>}
       <Section k="terbaru" />
