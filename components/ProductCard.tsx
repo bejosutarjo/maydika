@@ -1,13 +1,15 @@
 import Link from 'next/link';
 import Img from './Img';
 import { Product } from '@/lib/types';
-import { discount } from '@/lib/util';
+import { discount, formatCount } from '@/lib/util';
 
 const n = (v: number) => Math.round(v || 0).toLocaleString('id-ID');
 
 export default function ProductCard({ p }: { p: Product }) {
   const d = discount(p);
   const now = d > 0 ? p.promoPrice : p.price;
+  const both = !!(p.affiliateUrl && p.tiktokUrl);
+  const rel = 'noopener noreferrer sponsored';
   return (
     <article className="card">
       <Link href={`/produk/${p.id}`} className="card-img" aria-label={p.name}>
@@ -16,15 +18,22 @@ export default function ProductCard({ p }: { p: Product }) {
         {p.isDemo && <span className="dm">DEMO</span>}
       </Link>
       <div className="card-body">
-        <Link href={`/produk/${p.id}`} className="card-name">{p.name}</Link>
-        {(p.popular || p.recommended) && (
-          <div className="chips">{p.popular && <span>Populer</span>}{p.recommended && <span>Pilihan</span>}</div>
+        <Link href={`/produk/${p.id}`} className="card-name">{p.isMall && <span className="mall">Mall</span>}{p.name}</Link>
+        {(p.popular || p.recommended) && <div className="chips">{p.popular && <span>Populer</span>}{p.recommended && <span>Pilihan</span>}</div>}
+        {((p.rating || 0) > 0 || (p.sold || 0) > 0) && (
+          <div className="meta">
+            {(p.rating || 0) > 0 && <span className="rt">★ {(p.rating || 0).toFixed(1)}</span>}
+            {(p.sold || 0) > 0 && <span>{formatCount(p.sold || 0)} terjual</span>}
+          </div>
         )}
         <div className="price">
           <b><small>Rp</small>{n(now)}</b>
           {d > 0 && <s>Rp{n(p.price)}</s>}
         </div>
-        <a className="btn-s" href={p.affiliateUrl} target="_blank" rel="noopener noreferrer sponsored">BELI SEKARANG</a>
+        <div className="btns">
+          {p.affiliateUrl && <a className="btn-s shp" href={p.affiliateUrl} target="_blank" rel={rel}>{both ? 'Shopee' : 'BELI SEKARANG'}</a>}
+          {p.tiktokUrl && <a className="btn-s tt" href={p.tiktokUrl} target="_blank" rel={rel}>{both ? 'TikTok' : 'BELI SEKARANG'}</a>}
+        </div>
       </div>
     </article>
   );

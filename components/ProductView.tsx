@@ -3,14 +3,17 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { getItem, listCol } from '@/lib/db';
 import { Product } from '@/lib/types';
-import { discount, rupiah } from '@/lib/util';
+import { discount, formatCount, parseReviews, rupiah } from '@/lib/util';
 import Img from './Img';
 import ProductCard from './ProductCard';
+import Stars from './Stars';
 import { useSite } from './SiteProvider';
 
 export default function ProductView({ id }: { id: string }) {
   const [p, setP] = useState<Product | null | undefined>();
   const [rel, setRel] = useState<Product[]>([]);
+  const [openDesc, setOpenDesc] = useState(false);
+  const [allRv, setAllRv] = useState(false);
   const { categories } = useSite();
   useEffect(() => {
     getItem<Product>('products', id).then((prod) => {
@@ -25,7 +28,20 @@ export default function ProductView({ id }: { id: string }) {
   const d = discount(p);
   const now = d > 0 ? p.promoPrice : p.price;
   const cat = categories.find((c) => c.id === p.categoryId);
-  const buy = { href: p.affiliateUrl, target: '_blank', rel: 'noopener noreferrer sponsored' };
+  const rv = parseReviews(p.reviews);
+  const avg = (p.rating || 0) > 0 ? p.rating || 0 : rv.length ? rv.reduce((s, r) => s + r.rating, 0) / rv.length : 0;
+  const sold = p.sold || 0;
+  const rc = p.ratingCount || rv.length;
+  const desc = p.description || 'Tidak ada deskripsi.';
+  const long = desc.length > 220 || desc.split('\n').length > 5;
+  const links = [p.affiliateUrl && { k: 'shp', label: 'Shopee', href: p.affiliateUrl }, p.tiktokUrl && { k: 'tt', label: 'TikTok', href: p.tiktokUrl }]
+    .filter(Boolean) as { k: string; label: string; href: string }[];
+  const buttons = links.map((l) => (
+    <a key={l.k} className={`btn-buy ${l.k}`} href={l.href} target="_blank" rel="noopener noreferrer sponsored">
+      {links.length > 1 ? `Beli di ${l.label}` : `BELI DI ${l.label.toUpperCase()}`}
+    </a>
+  ));
+  const shownRv = allRv ? rv : rv.slice(0, 3);
 
   return (
     <div className="dp">
@@ -44,24 +60,51 @@ export default function ProductView({ id }: { id: string }) {
             {d > 0 && <><s>{rupiah(p.price)}</s><span className="pdisc">-{d}%</span></>}
           </div>
           <div className="box">
+            <h1 className="d-title">{p.isMall && <span className="mall">Mall</span>}{p.name}</h1>
+            {(avg > 0 || sold > 0) && (
+              <div className="rate-row">
+                {avg > 0 && <span><b>{avg.toFixed(1)}</b> <Stars value={avg} /></span>}
+                {rc > 0 && <span><b>{formatCount(rc)}</b> Penilaian</span>}
+                {sold > 0 && <span><b>{formatCount(sold)}</b> Terjual</span>}
+              </div>
+            )}
             {cat && <Link href={`/?cat=${cat.id}`} className="tag">{cat.icon} {cat.name}</Link>}
-            <h1 className="d-title">{p.name}</h1>
+            {(p.storeName || p.isMall) && (
+              <div className="store">
+                <span className="av">{(p.storeName || 'T').charAt(0).toUpperCase()}</span>
+                <div><b>{p.storeName || 'Toko Resmi'}</b>{p.isMall && <span className="mall">Mall</span>}<br /><small className="muted">{p.isMall ? 'Toko resmi (Mall)' : 'Penjual'}</small></div>
+              </div>
+            )}
             <ul className="trust">
-              <li>🛡️ Pembayaran &amp; pengiriman diproses langsung oleh Shopee</li>
-              <li>🔗 Link resmi menuju halaman produk Shopee</li>
+              <li>🛡️ Pembayaran &amp; pengiriman diproses langsung oleh platform pilihanmu</li>
+              <li>🔗 Link resmi menuju halaman produk{links.length > 1 ? ' di Shopee atau TikTok' : ''}</li>
             </ul>
-            <a className="btn-buy inline" {...buy}>BELI DI SHOPEE</a>
+            <div className="choose"><h4>Pilih tempat beli</h4>{buttons}</div>
           </div>
           <div className="box">
             <h3>Deskripsi Produk</h3>
-            <p className="desc">{p.description || 'Tidak ada deskripsi.'}</p>
+            <p className={'desc' + (long && !openDesc ? ' clamp' : '')}>{desc}</p>
+            {long && <button type="button" className="more-btn" onClick={() => setOpenDesc((v) => !v)} aria-expanded={openDesc}>{openDesc ? 'Tutup ▴' : 'Lihat Selengkapnya ▾'}</button>}
           </div>
+          {(rv.length > 0 || avg > 0) && (
+            <div className="box">
+              <h3>Ulasan Terbaru</h3>
+              {avg > 0 && <div className="rv-sum"><b>{avg.toFixed(1)}</b><div><Stars value={avg} size="1.1rem" /><br /><small className="muted">{rc > 0 ? `${formatCount(rc)} penilaian` : 'dari 5'}</small></div></div>}
+              {shownRv.map((r, i) => (
+                <div className="rv" key={i}>
+                  <span className="av">{r.name.charAt(0).toUpperCase()}</span>
+                  <div><b>{r.name}</b><br /><Stars value={r.rating} size=".8rem" /><p>{r.text}</p></div>
+                </div>
+              ))}
+              {rv.length > 3 && <button type="button" className="more-btn" onClick={() => setAllRv((v) => !v)}>{allRv ? 'Tutup ▴' : `Lihat Semua Ulasan (${rv.length}) ▾`}</button>}
+            </div>
+          )}
         </div>
       </div>
       {rel.length > 0 && <section className="wrap sec"><h2>Produk Terkait</h2><div className="grid">{rel.map((x) => <ProductCard key={x.id} p={x} />)}</div></section>}
       <div className="buybar">
         <div><small>Harga</small><b>{rupiah(now)}</b></div>
-        <a className="btn-buy" {...buy}>BELI DI SHOPEE</a>
+        <div className="btns">{buttons}</div>
       </div>
     </div>
   );
