@@ -5,11 +5,12 @@ import { byNewest, listCol, removeItem, saveItem } from '@/lib/db';
 import { clean, isHttpsUrl, isShopeeUrl, isTiktokUrl } from '@/lib/util';
 import ImageUpload from './ImageUpload';
 import MultiImageUpload from './MultiImageUpload';
+import IconPicker from './IconPicker';
 import { useSite } from './SiteProvider';
 
 export type Field = {
   key: string; label: string; required?: boolean; max?: number; maxNum?: number; step?: number; hint?: string;
-  type: 'text' | 'textarea' | 'number' | 'url' | 'shopee' | 'tiktok' | 'image' | 'images' | 'select' | 'checkbox';
+  type: 'text' | 'textarea' | 'number' | 'url' | 'shopee' | 'tiktok' | 'image' | 'images' | 'icon' | 'select' | 'checkbox';
   options?: { value: string; label: string }[];
 };
 type Props = {
@@ -111,6 +112,7 @@ export default function CrudPage({ col, title, fields, defaults, titleKey, image
                 <span>{f.label}{f.required && ' *'}</span>{f.hint && <small className="muted">{f.hint}</small>}
                 {f.type === 'textarea' ? <textarea rows={5} value={form[f.key] ?? ''} onChange={(e) => set(f.key, e.target.value)} />
                   
+                  : f.type === 'icon' ? <IconPicker value={form[f.key] ?? ''} onChange={(u) => set(f.key, u)} hint={String(form.name ?? '')} />
                   : f.type === 'images' ? <MultiImageUpload value={form[f.key] ?? []} onChange={(u) => set(f.key, u)} />
                   : f.type === 'image' ? <ImageUpload value={form[f.key] ?? ''} onChange={(u) => set(f.key, u)} />
                   : f.type === 'select' ? (
