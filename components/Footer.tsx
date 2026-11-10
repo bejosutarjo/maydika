@@ -2,14 +2,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSite } from './SiteProvider';
-import Img from './Img';
 import { TikTokIcon } from './PlatformIcons';
 import { FacebookIcon, InstagramIcon, WhatsAppIcon, YouTubeIcon } from './SocialIcons';
 
 export default function Footer() {
   const { settings: s, categories } = useSite();
   const path = usePathname();
-  if (path?.startsWith('/admin')) return null;
+  if (path?.startsWith('/admin') || path?.startsWith('/produk/')) return null;
   const wa = s.whatsapp.replace(/\D/g, '');
   const socials = [
     { n: 'Instagram', u: s.instagram, i: <InstagramIcon /> },
@@ -21,10 +20,7 @@ export default function Footer() {
     <footer className="ftr">
       <div className="wrap f-grid">
         <div className="f-brand">
-          <div className="f-logo">
-            <span className="logo-chip">{s.logo ? <Img src={s.logo} alt="" w={160} sizes="96px" /> : <span className="logo-mark">M</span>}</span>
-            <b>{s.siteName}</b>
-          </div>
+          <h4>Tentang Kami</h4>
           {s.description && <p className="f-desc">{s.description}</p>}
           <div className="f-safe"><span>🛡️ Transaksi di Shopee &amp; TikTok Shop</span><span>🔗 Link resmi</span></div>
           {(socials.length > 0 || wa) && (
@@ -38,8 +34,8 @@ export default function Footer() {
           <h4>Jelajahi</h4>
           <Link href="/">Beranda</Link>
           <Link href="/?sec=terbaru">Produk Terbaru</Link>
-          <Link href="/?sec=populer">Produk Populer</Link>
-          <Link href="/?sec=rekomendasi">Rekomendasi</Link>
+          <Link href="/populer">Produk Populer</Link>
+          <Link href="/rekomendasi">Rekomendasi</Link>
           <Link href="/syarat">Syarat &amp; Ketentuan</Link>
         </div>
         {categories.length > 0 && (

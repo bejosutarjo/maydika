@@ -10,6 +10,12 @@ import Stars from './Stars';
 import { ShopeeIcon, TikTokIcon } from './PlatformIcons';
 import { useSite } from './SiteProvider';
 
+// 10 produk acak; produk bertanda "Rekomendasi" diutamakan, sisanya diisi produk lain.
+function pickRecommendations(all: Product[], n = 10) {
+  const shuffle = (a: Product[]) => { const r = [...a]; for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; } return r; };
+  return [...shuffle(all.filter((p) => p.recommended)), ...shuffle(all.filter((p) => !p.recommended))].slice(0, n);
+}
+
 export default function ProductView({ id }: { id: string }) {
   const [p, setP] = useState<Product | null | undefined>();
   const [rel, setRel] = useState<Product[]>([]);
@@ -17,10 +23,10 @@ export default function ProductView({ id }: { id: string }) {
   const [allRv, setAllRv] = useState(false);
   const { categories } = useSite();
   useEffect(() => {
+    setP(undefined); setRel([]); setOpenDesc(false); setAllRv(false);
     getItem<Product>('products', id).then((prod) => {
       setP(prod);
-      if (prod) listCol<Product>('products', true)
-        .then((l) => setRel(l.filter((x) => x.id !== prod.id && prod.categoryId && x.categoryId === prod.categoryId).slice(0, 6))).catch(() => {});
+      if (prod) listCol<Product>('products', true).then((l) => setRel(pickRecommendations(l.filter((x) => x.id !== prod.id)))).catch(() => {});
     });
   }, [id]);
   if (p === undefined) return <div className="wrap"><div className="spin" /></div>;
@@ -97,7 +103,12 @@ export default function ProductView({ id }: { id: string }) {
           )}
         </div>
       </div>
-      {rel.length > 0 && <section className="wrap sec"><h2>Produk Terkait</h2><div className="grid">{rel.map((x) => <ProductCard key={x.id} p={x} />)}</div></section>}
+      {rel.length > 0 && (
+        <section className="wrap sec">
+          <div className="row"><h2>Rekomendasi Untukmu</h2><Link href="/rekomendasi" className="more">Lihat semua →</Link></div>
+          <div className="grid">{rel.map((x) => <ProductCard key={x.id} p={x} />)}</div>
+        </section>
+      )}
       <div className="buybar">
         <div className="pb"><b className="pb-now">{rupiah(now)}</b>{d > 0 && <s className="pb-old">{rupiah(p.price)}</s>}</div>
         <div className="btns">{mk(true)}</div>

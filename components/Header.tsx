@@ -30,6 +30,8 @@ export default function Header() {
       </div>
       <nav className="wrap cats" aria-label="Kategori">
         <Link href="/">Semua</Link>
+        <Link href="/populer">🔥 Populer</Link>
+        <Link href="/rekomendasi">⭐ Rekomendasi</Link>
         {categories.map((c) => <Link key={c.id} href={`/?cat=${c.id}`}>{c.icon} {c.name}</Link>)}
       </nav>
     </header>
