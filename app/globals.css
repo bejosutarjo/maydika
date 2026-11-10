@@ -96,3 +96,25 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--o2);border-color
 @media(min-width:900px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.hdr-in{flex-wrap:nowrap}.search{order:0;flex-basis:auto}}
 @media(min-width:1100px){.grid{grid-template-columns:repeat(5,minmax(0,1fr))}.catgrid{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== v3: rating, terjual, Mall, TikTok, ulasan, deskripsi buka-tutup ===== */
+.mall{display:inline-block;background:linear-gradient(135deg,#d0011b,#f53d2d);color:#fff;font-size:.6rem;font-weight:800;padding:1px 5px;border-radius:3px;margin-right:5px;vertical-align:1px;line-height:1.5;letter-spacing:.2px}
+.stars{display:inline-block;letter-spacing:1px;background:linear-gradient(90deg,#ffb400 var(--p,100%),#ddd var(--p,100%));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-size:.9rem;line-height:1;vertical-align:middle}
+.meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:.66rem;color:#777}.rt{color:#e8a200;font-weight:700}.meta span+span{border-left:1px solid #ddd;padding-left:6px}
+.btns{display:flex;gap:4px;margin-top:4px}.btns .btn-s{flex:1;margin:0;min-width:0;white-space:nowrap}
+.btn-s.tt,.btn-buy.tt{background:#111;box-shadow:inset 0 -2px 0 #FE2C55}.btn-buy.tt{box-shadow:inset 0 -3px 0 #FE2C55}
+.rate-row{display:flex;align-items:center;flex-wrap:wrap;font-size:.8rem;margin:6px 0 8px;color:#555}
+.rate-row>span{padding:0 10px;border-left:1px solid #e5e5e5;display:inline-flex;align-items:center;gap:4px}.rate-row>span:first-child{padding-left:0;border:0}.rate-row b{color:var(--o);border-bottom:1px solid var(--o);line-height:1.2}
+.d-title .mall{font-size:.7rem;padding:2px 6px;vertical-align:2px}
+.store{display:flex;align-items:center;gap:10px;padding:10px 0 2px;margin-top:8px;border-top:1px solid #f0f0f0;font-size:.88rem}
+.av{flex:none;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--o),var(--o2));color:#fff;display:grid;place-items:center;font-weight:800}
+.store .mall{margin:0 0 0 6px}
+.choose{display:none;gap:8px;margin-top:10px}.choose h4{margin:0;font-size:.82rem;color:#666}.choose .btn-buy{display:block;padding:12px;font-size:.92rem}
+.desc.clamp{max-height:8.5em;overflow:hidden;-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent)}
+.more-btn{display:block;width:100%;background:none;border:0;color:var(--o);font-weight:700;padding:8px;cursor:pointer;font-size:.85rem}
+.rv-sum{display:flex;align-items:center;gap:12px;background:#fff8f4;border-radius:8px;padding:10px 12px;margin-bottom:6px}.rv-sum b{font-size:1.9rem;color:var(--o);line-height:1}
+.rv{display:grid;grid-template-columns:36px 1fr;gap:10px;padding:10px 0;border-top:1px solid #f0f0f0}.rv .av{width:36px;height:36px;font-size:.9rem}.rv p{margin:4px 0 0;font-size:.86rem;word-break:break-word;white-space:pre-wrap}
+.buybar{gap:8px}.buybar>div:first-child{display:none}.buybar .btns{flex:1;margin:0;gap:6px;max-width:380px;margin-left:auto}.buybar .btn-buy{flex:1;min-width:0;padding:10px 6px;font-size:.8rem;border-radius:8px}
+@media(min-width:400px){.buybar>div:first-child{display:block}}
+@media(max-width:359px){.meta{font-size:.62rem}.buybar .btn-buy{font-size:.74rem;padding:9px 4px}}
+@media(min-width:800px){.choose{display:grid}.btn-buy.inline{display:none}}
