@@ -25,7 +25,7 @@ export default function Dashboard() {
         await saveItem('products', null, {
           name: `Produk Demo ${i}`, description: 'Ini adalah DATA DEMO. Hapus lewat dashboard dan ganti dengan produk asli Anda.',
           price, promoPrice: Math.round(price * 0.8), categoryId: id(cn), image: placeholder(`DEMO ${i}`),
-          affiliateUrl: 'https://shopee.co.id/', active: true, popular: i % 2 === 0, recommended: i % 3 === 0, isDemo: true,
+          affiliateUrl: 'https://shopee.co.id/', tiktokUrl: i % 2 ? 'https://www.tiktok.com/' : '', storeName: 'Toko Demo', isMall: i % 3 === 0, rating: 4 + (i % 10) / 10, ratingCount: 20 * i, sold: 150 * i, reviews: 'Pembeli Demo | 5 | Contoh ulasan (DEMO), ganti dengan ulasan asli.\nPembeli Demo | 4 | Contoh ulasan kedua (DEMO).', active: true, popular: i % 2 === 0, recommended: i % 3 === 0, isDemo: true,
         });
       }
       await saveItem('banners', null, { title: 'Banner Demo', image: placeholder('BANNER DEMO', '#FF7A00', '#F4511E'), link: '', order: 1, active: true, isDemo: true });
