@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { byNewest, listCol } from '@/lib/db';
-import { firebaseReady } from '@/lib/firebase';
 import { Product } from '@/lib/types';
 import ProductCard from './ProductCard';
 import BannerSlider from './BannerSlider';
@@ -49,7 +48,6 @@ export default function HomeClient() {
   };
   return (
     <>
-      {!firebaseReady && <p className="wrap err sec">Firebase belum dikonfigurasi. Isi .env.local sesuai .env.example.</p>}
       <BannerSlider />
       <div className="wrap quick">
         <Link href="/populer" className="q"><span>🔥</span><div><b>Produk Populer</b><small>Produk favorit</small></div></Link>
