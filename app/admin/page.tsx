@@ -24,7 +24,7 @@ export default function Dashboard() {
         const price = 100000 + i * 25000;
         await saveItem('products', null, {
           name: `Produk Demo ${i}`, description: 'Ini adalah DATA DEMO. Hapus lewat dashboard dan ganti dengan produk asli Anda.',
-          price, promoPrice: Math.round(price * 0.8), categoryId: id(cn), image: placeholder(`DEMO ${i}`),
+          price, promoPrice: Math.round(price * 0.8), categoryId: id(cn), image: placeholder(`DEMO ${i}`), images: [placeholder(`DEMO ${i}`), placeholder(`DEMO ${i}-2`, '#252525', '#F4511E'), placeholder(`DEMO ${i}-3`, '#FF7A00', '#FFB400')],
           affiliateUrl: 'https://shopee.co.id/', tiktokUrl: i % 2 ? 'https://www.tiktok.com/' : '', storeName: 'Toko Demo', isMall: i % 3 === 0, rating: 4 + (i % 10) / 10, ratingCount: 20 * i, sold: 150 * i, reviews: 'Pembeli Demo | 5 | Contoh ulasan (DEMO), ganti dengan ulasan asli.\nPembeli Demo | 4 | Contoh ulasan kedua (DEMO).', active: true, popular: i % 2 === 0, recommended: i % 3 === 0, isDemo: true,
         });
       }
