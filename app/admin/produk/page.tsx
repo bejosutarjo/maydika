@@ -25,7 +25,6 @@ export default function ProdukAdmin() {
         { key: 'promoPrice', label: 'Harga promosi (Rp)', type: 'number' },
         { key: 'categoryId', label: 'Kategori', type: 'select', options: cats.map((c) => ({ value: c.id, label: c.name })) },
         { key: 'image', label: 'Foto produk', type: 'image', required: true },
-        { key: 'storeName', label: 'Nama toko (opsional)', type: 'text', max: 80 },
         { key: 'isMall', label: 'Toko Mall (tampilkan label Mall)', type: 'checkbox' },
         { key: 'rating', label: 'Rating (0–5)', type: 'number', maxNum: 5, step: 0.1, hint: 'Isi sesuai rating asli di marketplace.' },
         { key: 'ratingCount', label: 'Jumlah penilaian', type: 'number' },
