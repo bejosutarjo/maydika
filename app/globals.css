@@ -178,3 +178,13 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--o2);border-color
 body:has(.buybar) .ftr{padding-bottom:72px}
 @media(min-width:700px){.f-grid{grid-template-columns:2fr 1fr 1fr}.f-brand{grid-column:auto}.f-grid>.f-brand:last-child{grid-column:1/-1}}
 @media(max-width:359px){.logo-txt b{font-size:.92rem}.logo-chip img{height:32px;max-width:80px}}
+
+/* ===== v7: halaman populer/rekomendasi, shortcut beranda ===== */
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px auto 0}
+.q{display:flex;align-items:center;gap:8px;background:#fff;border-radius:10px;padding:10px;box-shadow:var(--sh);border-left:4px solid var(--o);min-width:0}.q2{border-left-color:#FFB400}
+.q>span{font-size:1.6rem}.q b{display:block;font-size:.86rem}.q small{color:#888;font-size:.68rem}
+.plist-head{display:flex;align-items:center;gap:12px;margin:12px 0 0;padding:14px;border-radius:var(--r);color:#fff;background:linear-gradient(135deg,var(--o),var(--o2));box-shadow:var(--sh)}
+.plist-head>span{font-size:2rem}.plist-head h1{margin:0;font-size:1.2rem}.plist-head small{opacity:.92}
+.more-all{display:block;margin:16px auto 0}
+.dp{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+@media(min-width:800px){.dp{padding-bottom:24px}}
