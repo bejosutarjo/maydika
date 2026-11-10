@@ -12,8 +12,12 @@ export default function ProdukAdmin() {
   return (
     <CrudPage col="products" title="Produk" titleKey="name" imageKey="image"
       subtitle={(i) => rupiah(i.promoPrice > 0 ? i.promoPrice : i.price)}
-      defaults={{ active: true, popular: false, recommended: false, categoryId: '' }}
-      check={(d) => (d.promoPrice > 0 && d.promoPrice >= d.price ? 'Harga promosi harus lebih kecil dari harga normal' : null)}
+      defaults={{ active: true, popular: false, recommended: false, isMall: false, categoryId: '', rating: 0, ratingCount: 0, sold: 0 }}
+      check={(d) => {
+        if (!d.affiliateUrl && !d.tiktokUrl) return 'Isi minimal satu link: Shopee atau TikTok';
+        if (d.promoPrice > 0 && d.promoPrice >= d.price) return 'Harga promosi harus lebih kecil dari harga normal';
+        return null;
+      }}
       fields={[
         { key: 'name', label: 'Nama produk', type: 'text', required: true },
         { key: 'description', label: 'Deskripsi', type: 'textarea' },
@@ -21,7 +25,14 @@ export default function ProdukAdmin() {
         { key: 'promoPrice', label: 'Harga promosi (Rp)', type: 'number' },
         { key: 'categoryId', label: 'Kategori', type: 'select', options: cats.map((c) => ({ value: c.id, label: c.name })) },
         { key: 'image', label: 'Foto produk', type: 'image', required: true },
-        { key: 'affiliateUrl', label: 'Link affiliate Shopee', type: 'shopee', required: true },
+        { key: 'storeName', label: 'Nama toko (opsional)', type: 'text', max: 80 },
+        { key: 'isMall', label: 'Toko Mall (tampilkan label Mall)', type: 'checkbox' },
+        { key: 'rating', label: 'Rating (0–5)', type: 'number', maxNum: 5, step: 0.1, hint: 'Isi sesuai rating asli di marketplace.' },
+        { key: 'ratingCount', label: 'Jumlah penilaian', type: 'number' },
+        { key: 'sold', label: 'Jumlah terjual', type: 'number', hint: 'Isi sesuai angka asli di marketplace.' },
+        { key: 'reviews', label: 'Ulasan terbaru', type: 'textarea', hint: 'Satu ulasan per baris: Nama | bintang | komentar. Baris paling atas = terbaru. Gunakan ulasan asli.' },
+        { key: 'affiliateUrl', label: 'Link affiliate Shopee', type: 'shopee' },
+        { key: 'tiktokUrl', label: 'Link affiliate TikTok', type: 'tiktok', hint: 'Boleh isi salah satu atau keduanya.' },
         { key: 'active', label: 'Tampilkan di website', type: 'checkbox' },
         { key: 'popular', label: 'Produk populer', type: 'checkbox' },
         { key: 'recommended', label: 'Rekomendasi', type: 'checkbox' },
