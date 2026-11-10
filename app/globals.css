@@ -118,3 +118,19 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--o2);border-color
 @media(min-width:400px){.buybar>div:first-child{display:block}}
 @media(max-width:359px){.meta{font-size:.62rem}.buybar .btn-buy{font-size:.74rem;padding:9px 4px}}
 @media(min-width:800px){.choose{display:grid}.btn-buy.inline{display:none}}
+
+/* ===== v4: tombol beli mirip Shopee & TikTok, harga di samping tombol ===== */
+.btn-buy,.btn-s{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn-s{display:flex;gap:4px}
+.btn-buy .ic,.btn-s .ic{width:1.2em;height:1.2em;flex:none}
+.btn-buy{border-radius:4px;font-weight:700;letter-spacing:0}.btn-s{border-radius:4px;letter-spacing:0}
+.btn-buy.shp,.btn-s.shp{background:#EE4D2D;box-shadow:none}.btn-buy.shp:hover,.btn-s.shp:hover{filter:brightness(1.06)}
+.btn-buy.tt,.btn-s.tt{background:#000;color:#fff;box-shadow:none}
+.btn-buy.tt .ic,.btn-s.tt .ic{filter:drop-shadow(1px 1px 0 #FE2C55) drop-shadow(-1px -1px 0 #25F4EE)}
+.choose .btn-buy{display:flex}
+.buybar{align-items:stretch;gap:10px}
+.buybar>div:first-child{display:flex!important;flex-direction:column;justify-content:center;flex:none;max-width:40%;min-width:0}
+.pb-now{color:#EE4D2D;font-weight:800;font-size:1.02rem;line-height:1.15;white-space:nowrap}.pb-old{color:#999;font-size:.68rem;line-height:1.2;white-space:nowrap}
+.buybar .btns{flex:1;max-width:none;margin:0;gap:6px;min-width:0}
+.buybar .btn-buy{flex:1;min-width:0;padding:11px 6px;font-size:.82rem;white-space:nowrap}
+@media(max-width:359px){.pb-now{font-size:.9rem}.buybar .btn-buy{font-size:.72rem;gap:3px;padding:10px 3px}}
