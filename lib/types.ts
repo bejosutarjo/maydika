@@ -1,6 +1,6 @@
 export type Product = {
   id: string; name: string; description: string; price: number; promoPrice: number;
-  categoryId: string; image: string; affiliateUrl: string; tiktokUrl?: string; active: boolean;
+  categoryId: string; image: string; images?: string[]; affiliateUrl: string; tiktokUrl?: string; active: boolean;
   popular?: boolean; recommended?: boolean; isDemo?: boolean; createdAt?: { seconds: number };
   storeName?: string; isMall?: boolean; rating?: number; ratingCount?: number; sold?: number; reviews?: string;
 };
