@@ -134,3 +134,14 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--o2);border-color
 .buybar .btns{flex:1;max-width:none;margin:0;gap:6px;min-width:0}
 .buybar .btn-buy{flex:1;min-width:0;padding:11px 6px;font-size:.82rem;white-space:nowrap}
 @media(max-width:359px){.pb-now{font-size:.9rem}.buybar .btn-buy{font-size:.72rem;gap:3px;padding:10px 3px}}
+
+/* ===== v5: PWA admin ===== */
+.pwa-btn{background:linear-gradient(135deg,var(--o),var(--o2));color:#fff!important;border:0;border-radius:999px;padding:7px 14px;font:inherit;font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.adm aside .pwa-btn{display:block;margin:6px 0;text-align:center}.pwa-wrap{display:inline-flex;flex-direction:column;gap:4px}.pwa-hint{color:#666;font-size:.7rem;max-width:180px}
+.pwa-top{display:flex;justify-content:center;padding-top:12px}
+.adm-top{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff;border-radius:var(--r);padding:8px 12px;box-shadow:var(--sh);color:var(--o)}
+.adm-top>div{display:flex;align-items:center;gap:8px}.adm-top button:not(.pwa-btn){border:0;background:none;color:#666;font:inherit;cursor:pointer}
+.adm-bot{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;background:#fff;box-shadow:0 -2px 12px rgba(0,0,0,.12);padding-bottom:env(safe-area-inset-bottom,0px)}
+.adm-bot a{flex:1;min-width:0;text-align:center;font-size:.66rem;padding:7px 2px;color:#777}.adm-bot a span{display:block;font-size:1.25rem;line-height:1.2}.adm-bot a.on{color:var(--o);font-weight:700}
+@media(max-width:599px){.adm aside{display:none}.adm{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px));padding-top:max(12px,env(safe-area-inset-top,0px))}}
+@media(min-width:600px){.adm-bot,.adm-top{display:none}}
