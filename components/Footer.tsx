@@ -21,7 +21,7 @@ export default function Footer() {
           {socials.map(([n, u]) => <a key={n} href={u} target="_blank" rel="noopener noreferrer">{n}</a>)}
         </div>
       </div>
-      <p className="wrap copy">© {new Date().getFullYear()} {s.siteName}. Kami dapat menerima komisi afiliasi dari pembelian melalui tautan Shopee.</p>
+      <p className="wrap copy">© {new Date().getFullYear()} {s.siteName}</p>
     </footer>
   );
 }
