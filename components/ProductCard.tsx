@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Img from './Img';
 import { Product } from '@/lib/types';
 import { discount, formatCount } from '@/lib/util';
+import { ShopeeIcon, TikTokIcon } from './PlatformIcons';
 
 const n = (v: number) => Math.round(v || 0).toLocaleString('id-ID');
 
@@ -31,8 +32,8 @@ export default function ProductCard({ p }: { p: Product }) {
           {d > 0 && <s>Rp{n(p.price)}</s>}
         </div>
         <div className="btns">
-          {p.affiliateUrl && <a className="btn-s shp" href={p.affiliateUrl} target="_blank" rel={rel}>{both ? 'Shopee' : 'BELI SEKARANG'}</a>}
-          {p.tiktokUrl && <a className="btn-s tt" href={p.tiktokUrl} target="_blank" rel={rel}>{both ? 'TikTok' : 'BELI SEKARANG'}</a>}
+          {p.affiliateUrl && <a className="btn-s shp" href={p.affiliateUrl} target="_blank" rel={rel}><ShopeeIcon />{both ? 'Shopee' : 'Beli Sekarang'}</a>}
+          {p.tiktokUrl && <a className="btn-s tt" href={p.tiktokUrl} target="_blank" rel={rel}><TikTokIcon />{both ? 'TikTok' : 'Beli Sekarang'}</a>}
         </div>
       </div>
     </article>

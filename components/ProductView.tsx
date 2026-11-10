@@ -7,6 +7,7 @@ import { discount, formatCount, parseReviews, rupiah } from '@/lib/util';
 import Img from './Img';
 import ProductCard from './ProductCard';
 import Stars from './Stars';
+import { ShopeeIcon, TikTokIcon } from './PlatformIcons';
 import { useSite } from './SiteProvider';
 
 export default function ProductView({ id }: { id: string }) {
@@ -36,9 +37,10 @@ export default function ProductView({ id }: { id: string }) {
   const long = desc.length > 220 || desc.split('\n').length > 5;
   const links = [p.affiliateUrl && { k: 'shp', label: 'Shopee', href: p.affiliateUrl }, p.tiktokUrl && { k: 'tt', label: 'TikTok', href: p.tiktokUrl }]
     .filter(Boolean) as { k: string; label: string; href: string }[];
-  const buttons = links.map((l) => (
+  const mk = (short: boolean) => links.map((l) => (
     <a key={l.k} className={`btn-buy ${l.k}`} href={l.href} target="_blank" rel="noopener noreferrer sponsored">
-      {links.length > 1 ? `Beli di ${l.label}` : `BELI DI ${l.label.toUpperCase()}`}
+      {l.k === 'shp' ? <ShopeeIcon /> : <TikTokIcon />}
+      <span>{links.length === 1 ? 'Beli Sekarang' : short ? l.label : `Beli di ${l.k === 'tt' ? 'TikTok Shop' : 'Shopee'}`}</span>
     </a>
   ));
   const shownRv = allRv ? rv : rv.slice(0, 3);
@@ -69,17 +71,11 @@ export default function ProductView({ id }: { id: string }) {
               </div>
             )}
             {cat && <Link href={`/?cat=${cat.id}`} className="tag">{cat.icon} {cat.name}</Link>}
-            {(p.storeName || p.isMall) && (
-              <div className="store">
-                <span className="av">{(p.storeName || 'T').charAt(0).toUpperCase()}</span>
-                <div><b>{p.storeName || 'Toko Resmi'}</b>{p.isMall && <span className="mall">Mall</span>}<br /><small className="muted">{p.isMall ? 'Toko resmi (Mall)' : 'Penjual'}</small></div>
-              </div>
-            )}
             <ul className="trust">
               <li>🛡️ Pembayaran &amp; pengiriman diproses langsung oleh platform pilihanmu</li>
               <li>🔗 Link resmi menuju halaman produk{links.length > 1 ? ' di Shopee atau TikTok' : ''}</li>
             </ul>
-            <div className="choose"><h4>Pilih tempat beli</h4>{buttons}</div>
+            <div className="choose"><h4>Pilih tempat beli</h4>{mk(false)}</div>
           </div>
           <div className="box">
             <h3>Deskripsi Produk</h3>
@@ -103,8 +99,8 @@ export default function ProductView({ id }: { id: string }) {
       </div>
       {rel.length > 0 && <section className="wrap sec"><h2>Produk Terkait</h2><div className="grid">{rel.map((x) => <ProductCard key={x.id} p={x} />)}</div></section>}
       <div className="buybar">
-        <div><small>Harga</small><b>{rupiah(now)}</b></div>
-        <div className="btns">{buttons}</div>
+        <div className="pb"><b className="pb-now">{rupiah(now)}</b>{d > 0 && <s className="pb-old">{rupiah(p.price)}</s>}</div>
+        <div className="btns">{mk(true)}</div>
       </div>
     </div>
   );
