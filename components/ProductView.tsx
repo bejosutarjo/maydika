@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getItem, listCol } from '@/lib/db';
 import { Product } from '@/lib/types';
 import { discount, formatCount, parseReviews, rupiah } from '@/lib/util';
@@ -21,9 +21,11 @@ export default function ProductView({ id }: { id: string }) {
   const [rel, setRel] = useState<Product[]>([]);
   const [openDesc, setOpenDesc] = useState(false);
   const [allRv, setAllRv] = useState(false);
+  const [idx, setIdx] = useState(0);
+  const trackRef = useRef<HTMLDivElement>(null);
   const { categories } = useSite();
   useEffect(() => {
-    setP(undefined); setRel([]); setOpenDesc(false); setAllRv(false);
+    setP(undefined); setRel([]); setOpenDesc(false); setAllRv(false); setIdx(0);
     getItem<Product>('products', id).then((prod) => {
       setP(prod);
       if (prod) listCol<Product>('products', true).then((l) => setRel(pickRecommendations(l.filter((x) => x.id !== prod.id)))).catch(() => {});
@@ -49,6 +51,8 @@ export default function ProductView({ id }: { id: string }) {
       <span>{links.length === 1 ? 'Beli Sekarang' : short ? l.label : `Beli di ${l.k === 'tt' ? 'TikTok Shop' : 'Shopee'}`}</span>
     </a>
   ));
+  const imgs = (p.images && p.images.filter(Boolean).length ? p.images.filter(Boolean) : p.image ? [p.image] : []).slice(0, 5);
+  const go = (i: number) => { const el = trackRef.current; if (el) el.scrollTo({ left: Math.max(0, Math.min(imgs.length - 1, i)) * el.clientWidth, behavior: 'smooth' }); };
   const shownRv = allRv ? rv : rv.slice(0, 3);
 
   return (
@@ -57,10 +61,25 @@ export default function ProductView({ id }: { id: string }) {
         <Link href="/">Beranda</Link>{cat && <> › <Link href={`/?cat=${cat.id}`}>{cat.name}</Link></>} › <span>{p.name}</span>
       </div>
       <div className="wrap detail">
-        <div className="d-img">
-          <Img src={p.image} alt={p.name} w={1024} sizes="(max-width:800px) 100vw, 480px" loading="eager" />
-          {d > 0 && <span className="disc big"><b>{d}%</b><i>OFF</i></span>}
-          {p.isDemo && <span className="dm">DEMO</span>}
+        <div className="d-gal">
+          <div className="d-img">
+            <div className="g-track" ref={trackRef} onScroll={(e) => setIdx(Math.round(e.currentTarget.scrollLeft / (e.currentTarget.clientWidth || 1)))}>
+              {imgs.map((src, i) => (
+                <div className="g-slide" key={src + i}>
+                  <Img src={src} alt={`${p.name} – foto ${i + 1}`} w={1024} sizes="(max-width:800px) 100vw, 480px" loading={i === 0 ? 'eager' : 'lazy'} />
+                </div>
+              ))}
+            </div>
+            {d > 0 && <span className="disc big"><b>{d}%</b><i>OFF</i></span>}
+            {p.isDemo && <span className="dm">DEMO</span>}
+            {imgs.length > 1 && <span className="g-count">{idx + 1}/{imgs.length}</span>}
+            {imgs.length > 1 && <><button type="button" className="g-nav prev" onClick={() => go(idx - 1)} aria-label="Foto sebelumnya">‹</button><button type="button" className="g-nav next" onClick={() => go(idx + 1)} aria-label="Foto berikutnya">›</button></>}
+          </div>
+          {imgs.length > 1 && (
+            <div className="g-thumbs">
+              {imgs.map((src, i) => <button type="button" key={src + i} className={i === idx ? 'on' : ''} onClick={() => go(i)} aria-label={`Foto ${i + 1}`}><Img src={src} alt="" w={160} sizes="84px" /></button>)}
+            </div>
+          )}
         </div>
         <div className="d-info">
           <div className="pbar">

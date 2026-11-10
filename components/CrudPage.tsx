@@ -4,11 +4,12 @@ import { useCallback, useEffect, useState } from 'react';
 import { byNewest, listCol, removeItem, saveItem } from '@/lib/db';
 import { clean, isHttpsUrl, isShopeeUrl, isTiktokUrl } from '@/lib/util';
 import ImageUpload from './ImageUpload';
+import MultiImageUpload from './MultiImageUpload';
 import { useSite } from './SiteProvider';
 
 export type Field = {
   key: string; label: string; required?: boolean; max?: number; maxNum?: number; step?: number; hint?: string;
-  type: 'text' | 'textarea' | 'number' | 'url' | 'shopee' | 'tiktok' | 'image' | 'select' | 'checkbox';
+  type: 'text' | 'textarea' | 'number' | 'url' | 'shopee' | 'tiktok' | 'image' | 'images' | 'select' | 'checkbox';
   options?: { value: string; label: string }[];
 };
 type Props = {
@@ -43,6 +44,11 @@ export default function CrudPage({ col, title, fields, defaults, titleKey, image
       const raw = form[f.key];
       let v: any;
       if (f.type === 'checkbox') v = !!raw;
+      else if (f.type === 'images') {
+        const arr = (Array.isArray(raw) ? raw : []).filter((x: unknown) => typeof x === 'string' && x).slice(0, 5);
+        if (f.required && !arr.length) return setErr(`${f.label} wajib diisi`);
+        v = arr;
+      }
       else if (f.type === 'number') {
         if (raw === '' || raw === undefined || raw === null) { if (f.required) return setErr(`${f.label} wajib diisi`); v = 0; }
         else { v = Number(raw); if (!Number.isFinite(v) || v < 0) return setErr(`${f.label} harus angka ≥ 0`); if (f.maxNum !== undefined && v > f.maxNum) return setErr(`${f.label} maksimal ${f.maxNum}`); }
@@ -55,6 +61,7 @@ export default function CrudPage({ col, title, fields, defaults, titleKey, image
       }
       data[f.key] = v;
     }
+    if (Array.isArray(data.images)) data.image = data.images[0] || '';
     const m = check?.(data);
     if (m) return setErr(m);
     setBusy(true); setErr('');
@@ -89,7 +96,7 @@ export default function CrudPage({ col, title, fields, defaults, titleKey, image
               <div><b>{i[titleKey]}</b>{i.isDemo && <span className="tag">DEMO</span>}{i.active === false && <span className="tag off">Tersembunyi</span>}<br /><small>{subtitle?.(i)}</small></div>
               {hasOrder && !qs && <><button className="btn sm ghost" aria-label="Naik" onClick={() => move(items.indexOf(i), -1)}>▲</button><button className="btn sm ghost" aria-label="Turun" onClick={() => move(items.indexOf(i), 1)}>▼</button></>}
               {typeof i.active === 'boolean' && <button className="btn sm ghost" onClick={() => toggle(i)}>{i.active ? 'Sembunyikan' : 'Tampilkan'}</button>}
-              <button className="btn sm ghost" onClick={() => { setForm({ ...i }); setEditId(i.id); setErr(''); }}>Edit</button>
+              <button className="btn sm ghost" onClick={() => { setForm({ ...i, ...(fields.some((x) => x.type === 'images') && !i.images && i.image ? { images: [i.image] } : {}) }); setEditId(i.id); setErr(''); }}>Edit</button>
               <button className="btn sm danger" onClick={() => del(i)}>Hapus</button>
             </li>
           ))}
@@ -103,6 +110,8 @@ export default function CrudPage({ col, title, fields, defaults, titleKey, image
               <label key={f.key} className={f.type === 'checkbox' ? 'chk' : ''}>
                 <span>{f.label}{f.required && ' *'}</span>{f.hint && <small className="muted">{f.hint}</small>}
                 {f.type === 'textarea' ? <textarea rows={5} value={form[f.key] ?? ''} onChange={(e) => set(f.key, e.target.value)} />
+                  
+                  : f.type === 'images' ? <MultiImageUpload value={form[f.key] ?? []} onChange={(u) => set(f.key, u)} />
                   : f.type === 'image' ? <ImageUpload value={form[f.key] ?? ''} onChange={(u) => set(f.key, u)} />
                   : f.type === 'select' ? (
                     <select value={form[f.key] ?? ''} onChange={(e) => set(f.key, e.target.value)}>
