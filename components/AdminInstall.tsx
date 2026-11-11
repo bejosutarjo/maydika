@@ -24,10 +24,10 @@ export default function AdminInstall() {
   }, []);
 
   if (installed) return null;
-  if (evt) return <button type="button" className="pwa-btn" onClick={async () => { await evt.prompt(); await evt.userChoice; setEvt(null); }}>📲 Pasang Aplikasi</button>;
+  if (evt) return <button type="button" className="pwa-btn" onClick={async () => { await evt.prompt(); await evt.userChoice; setEvt(null); }}>📲<span className="pwa-t"> Pasang Aplikasi</span></button>;
   if (ios) return (
     <span className="pwa-wrap">
-      <button type="button" className="pwa-btn" onClick={() => setHint((v) => !v)}>📲 Pasang Aplikasi</button>
+      <button type="button" className="pwa-btn" onClick={() => setHint((v) => !v)}>📲<span className="pwa-t"> Pasang Aplikasi</span></button>
       {hint && <small className="pwa-hint">Ketuk ikon Bagikan, lalu pilih “Tambah ke Layar Utama”.</small>}
     </span>
   );
