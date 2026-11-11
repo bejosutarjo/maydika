@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { listCol, removeItem, saveItem } from '@/lib/db';
 import { placeholder } from '@/lib/util';
+import Analytics from '@/components/Analytics';
 
 export default function Dashboard() {
   const [n, setN] = useState<{ p: any[]; c: any[]; b: any[] } | null>(null);
@@ -47,6 +48,7 @@ export default function Dashboard() {
         <div><b>{n.p.length}</b>Total Produk</div><div><b>{n.c.length}</b>Total Kategori</div><div><b>{n.b.length}</b>Total Banner</div>
         <div><b>{n.p.filter((p) => p.active).length}</b>Produk Tampil</div><div><b>{n.p.filter((p) => !p.active).length}</b>Produk Tersembunyi</div><div><b>{n.b.filter((b) => b.active).length}</b>Banner Aktif</div>
       </div>
+      <Analytics products={n.p} categories={n.c} />
       <div className="row">
         {!n.p.length && <button className="btn" onClick={seed}>Muat data demo</button>}
         {demo && <button className="btn danger" onClick={clearDemo}>Hapus data demo</button>}
