@@ -9,6 +9,7 @@ import ProductCard from './ProductCard';
 import Stars from './Stars';
 import { ShopeeIcon, TikTokIcon } from './PlatformIcons';
 import { useSite } from './SiteProvider';
+import { trackClick, trackProductView } from '@/lib/track';
 
 // 10 produk acak; produk bertanda "Rekomendasi" diutamakan, sisanya diisi produk lain.
 function pickRecommendations(all: Product[], n = 10) {
@@ -28,6 +29,7 @@ export default function ProductView({ id }: { id: string }) {
     setP(undefined); setRel([]); setOpenDesc(false); setAllRv(false); setIdx(0);
     getItem<Product>('products', id).then((prod) => {
       setP(prod);
+      if (prod) trackProductView(prod.id);
       if (prod) listCol<Product>('products', true).then((l) => setRel(pickRecommendations(l.filter((x) => x.id !== prod.id)))).catch(() => {});
     });
   }, [id]);
@@ -46,7 +48,7 @@ export default function ProductView({ id }: { id: string }) {
   const links = [p.affiliateUrl && { k: 'shp', label: 'Shopee', href: p.affiliateUrl }, p.tiktokUrl && { k: 'tt', label: 'TikTok', href: p.tiktokUrl }]
     .filter(Boolean) as { k: string; label: string; href: string }[];
   const mk = (short: boolean) => links.map((l) => (
-    <a key={l.k} className={`btn-buy ${l.k}`} href={l.href} target="_blank" rel="noopener noreferrer sponsored">
+    <a key={l.k} className={`btn-buy ${l.k}`} onClick={() => trackClick(p.id, l.k === 'tt' ? 'tiktok' : 'shopee')} href={l.href} target="_blank" rel="noopener noreferrer sponsored">
       {l.k === 'shp' ? <ShopeeIcon /> : <TikTokIcon />}
       <span>{links.length === 1 ? 'Beli Sekarang' : short ? l.label : `Beli di ${l.k === 'tt' ? 'TikTok Shop' : 'Shopee'}`}</span>
     </a>

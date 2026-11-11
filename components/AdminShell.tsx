@@ -26,6 +26,8 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
     if (state === 'ok' && path === '/admin/login') router.replace('/admin');
   }, [state, path, router]);
 
+  useEffect(() => { if (state === 'ok') { try { localStorage.setItem('md_owner', '1'); } catch { /* abaikan */ } } }, [state]);
+
   if (path === '/admin/login') return <><div className="wrap pwa-top"><AdminInstall /></div>{children}</>;
   if (state !== 'ok') return <><AdminInstall /><div className="wrap"><div className="spin" /></div></>;
   const cur = nav.find(([h]) => h === path)?.[1] ?? 'Dashboard';
