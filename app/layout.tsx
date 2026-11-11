@@ -3,6 +3,7 @@ import './globals.css';
 import SiteProvider from '@/components/SiteProvider';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Tracker from '@/components/Tracker';
 import { fetchSettings, siteUrl } from '@/lib/server';
 import { DEFAULT_SETTINGS } from '@/lib/types';
 
@@ -24,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="id">
       <body>
-        <SiteProvider><Header /><main>{children}</main><Footer /></SiteProvider>
+        <SiteProvider><Tracker /><Header /><main>{children}</main><Footer /></SiteProvider>
       </body>
     </html>
   );
