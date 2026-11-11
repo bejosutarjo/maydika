@@ -34,8 +34,8 @@ export async function fetchSettings() {
 }
 
 export function siteUrl() {
-  const e = process.env.NEXT_PUBLIC_SITE_URL;
-  if (e) return e.replace(/\/$/, '');
-  const v = process.env.VERCEL_PROJECT_PRODUCTION_URL;
-  return v ? `https://${v}` : 'http://localhost:3000';
+  // Prioritas: env → domain utama maydika.my.id (tidak pernah localhost / vercel.app).
+  let e = (process.env.NEXT_PUBLIC_SITE_URL || '').trim().replace(/\/+$/, '');
+  if (e && !/^https?:\/\//i.test(e)) e = 'https://' + e;
+  return e || 'https://maydika.my.id';
 }
