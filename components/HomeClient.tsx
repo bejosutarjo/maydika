@@ -53,6 +53,14 @@ export default function HomeClient() {
         <Link href="/populer" className="q"><span>🔥</span><div><b>Produk Populer</b><small>Produk favorit</small></div></Link>
         <Link href="/rekomendasi" className="q q2"><span>⭐</span><div><b>Rekomendasi</b><small>Pilihan terbaik kami</small></div></Link>
       </div>
+      {pick('populer').length > 0 && (
+        <section className="wrap sec">
+          <div className="pop-box">
+            <div className="row"><h2>🔥 Produk Populer</h2><Link href="/populer" className="more">Lihat semua →</Link></div>
+            <div className="hscroll">{pick('populer').slice(0, 12).map((p) => <ProductCard key={p.id} p={p} />)}</div>
+          </div>
+        </section>
+      )}
       <CategoryStrip />
       {failed && <p className="wrap err">Gagal memuat data. Periksa konfigurasi Firebase dan Firestore Rules.</p>}
       {!all.length && !failed && <p className="wrap muted sec">Belum ada produk. Owner dapat menambahkannya lewat /admin.</p>}

@@ -50,7 +50,7 @@ export default function ProductView({ id }: { id: string }) {
   const mk = (short: boolean) => links.map((l) => (
     <a key={l.k} className={`btn-buy ${l.k}`} onClick={() => trackClick(p.id, l.k === 'tt' ? 'tiktok' : 'shopee')} href={l.href} target="_blank" rel="noopener noreferrer sponsored">
       {l.k === 'shp' ? <ShopeeIcon /> : <TikTokIcon />}
-      <span>{links.length === 1 ? 'Beli Sekarang' : short ? l.label : `Beli di ${l.k === 'tt' ? 'TikTok Shop' : 'Shopee'}`}</span>
+      <span>{links.length === 1 || !short ? `Cek Diskon di ${l.k === 'tt' ? 'TikTok' : 'Shopee'}` : `Diskon ${l.label}`}</span>
     </a>
   ));
   const imgs = (p.images && p.images.filter(Boolean).length ? p.images.filter(Boolean) : p.image ? [p.image] : []).slice(0, 5);
