@@ -1,13 +1,9 @@
 import { doc, increment, setDoc } from 'firebase/firestore';
 import { db } from './firebase';
+import { shouldSkip as skip } from './skip';
 
 // Statistik anonim (tanpa data pribadi). Tanggal memakai WIB (UTC+7).
 const day = () => new Date(Date.now() + 7 * 3600e3).toISOString().slice(0, 10);
-function skip() {
-  if (typeof window === 'undefined') return true;
-  try { if (localStorage.getItem('md_owner')) return true; } catch { /* abaikan */ }
-  return /bot|crawl|spider|headless|lighthouse/i.test(navigator.userAgent);
-}
 const fire = (p: Promise<unknown>) => { p.catch(() => {}); };
 
 export function trackPageView() {
