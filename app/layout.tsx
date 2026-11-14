@@ -15,8 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(siteUrl()),
     title: { default: name, template: `%s | ${name}` },
     description: desc,
-    openGraph: { title: name, description: desc, siteName: name, locale: 'id_ID', type: 'website' },
-    twitter: { card: 'summary_large_image', title: name, description: desc },
+    openGraph: { title: name, description: desc, siteName: name, locale: 'id_ID', type: 'website', url: '/', images: [{ url: '/og-banner.jpg', width: 1200, height: 630, alt: name }] },
+    twitter: { card: 'summary_large_image', title: name, description: desc, images: ['/og-banner.jpg'] },
   };
 }
 export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#F4511E' };
