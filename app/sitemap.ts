@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { fetchActiveProducts, siteUrl } from '@/lib/server';
+import { fetchActiveProducts, fetchSettings, siteUrl } from '@/lib/server';
 
 // Tersedia di /sitemap.xml. Selalu mengembalikan XML valid, walau Firestore gagal dibaca.
 export const revalidate = 3600;
@@ -19,7 +19,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/syarat`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
   ];
   try {
-    const products = await fetchActiveProducts();
+    const settings = await fetchSettings();
+    const products = settings?.detail === 'on' ? await fetchActiveProducts() : []; // tanpa halaman detail, tidak ada URL produk
     return [...pages, ...products.map((p) => ({
       url: `${base}/produk/${p.id}`,
       lastModified: safeDate(p._updated, now),

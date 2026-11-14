@@ -339,3 +339,4 @@ body:has(.buybar) .ftr{padding-bottom:72px}
 .g-track:focus-visible,.hscroll:focus-visible{outline:3px solid var(--ot);outline-offset:-3px}
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #1a73e8;outline-offset:2px}
 .hdr a:focus-visible,.hdr button:focus-visible,.ftr a:focus-visible{outline-color:#fff}
+.settings input[type=checkbox]{width:auto}
