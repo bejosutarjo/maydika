@@ -4,7 +4,7 @@ import SiteProvider from '@/components/SiteProvider';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Tracker from '@/components/Tracker';
-import { fetchSettings, siteUrl } from '@/lib/server';
+import { fetchCategories, fetchSettings, siteUrl, slimCategory, slimSettings } from '@/lib/server';
 import { DEFAULT_SETTINGS } from '@/lib/types';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -21,11 +21,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#F4511E' };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const [s, cats] = await Promise.all([fetchSettings(), fetchCategories()]);
   return (
     <html lang="id">
       <body>
-        <SiteProvider><Tracker /><Header /><main>{children}</main><Footer /></SiteProvider>
+        <SiteProvider initialSettings={slimSettings(s)} initialCategories={cats.map(slimCategory)}>
+          <Tracker /><Header /><main>{children}</main><Footer />
+        </SiteProvider>
       </body>
     </html>
   );
