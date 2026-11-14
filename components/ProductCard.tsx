@@ -4,7 +4,7 @@ import Img from './Img';
 import { Product } from '@/lib/types';
 import { discount, formatCount } from '@/lib/util';
 import { ShopeeIcon, TikTokIcon } from './PlatformIcons';
-import { trackClick } from '@/lib/track';
+import { lazyTrack } from '@/lib/trackLazy';
 
 const n = (v: number) => Math.round(v || 0).toLocaleString('id-ID');
 
@@ -34,8 +34,8 @@ export default function ProductCard({ p }: { p: Product }) {
           {d > 0 && <s>Rp{n(p.price)}</s>}
         </div>
         <div className={'btns' + (both ? ' two' : '')}>
-          {p.affiliateUrl && <a className="btn-s shp" onClick={() => trackClick(p.id, 'shopee')} href={p.affiliateUrl} target="_blank" rel={rel}><ShopeeIcon />Cek Diskon di Shopee</a>}
-          {p.tiktokUrl && <a className="btn-s tt" onClick={() => trackClick(p.id, 'tiktok')} href={p.tiktokUrl} target="_blank" rel={rel}><TikTokIcon />Cek Diskon di TikTok</a>}
+          {p.affiliateUrl && <a className="btn-s shp" onClick={() => lazyTrack.click(p.id, 'shopee')} href={p.affiliateUrl} target="_blank" rel={rel}><ShopeeIcon />Cek Diskon di Shopee</a>}
+          {p.tiktokUrl && <a className="btn-s tt" onClick={() => lazyTrack.click(p.id, 'tiktok')} href={p.tiktokUrl} target="_blank" rel={rel}><TikTokIcon />Cek Diskon di TikTok</a>}
         </div>
       </div>
     </article>

@@ -1,7 +1,6 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { getItem, listCol } from '@/lib/db';
 import { Product } from '@/lib/types';
 import { discount, formatCount, parseReviews, rupiah } from '@/lib/util';
 import Img from './Img';
@@ -9,7 +8,7 @@ import ProductCard from './ProductCard';
 import Stars from './Stars';
 import { ShopeeIcon, TikTokIcon } from './PlatformIcons';
 import { useSite } from './SiteProvider';
-import { trackClick, trackProductView } from '@/lib/track';
+import { lazyTrack } from '@/lib/trackLazy';
 
 // 10 produk acak; produk bertanda "Rekomendasi" diutamakan, sisanya diisi produk lain.
 function pickRecommendations(all: Product[], n = 10) {
@@ -17,24 +16,14 @@ function pickRecommendations(all: Product[], n = 10) {
   return [...shuffle(all.filter((p) => p.recommended)), ...shuffle(all.filter((p) => !p.recommended))].slice(0, n);
 }
 
-export default function ProductView({ id }: { id: string }) {
-  const [p, setP] = useState<Product | null | undefined>();
+export default function ProductView({ product: p, pool }: { product: Product; pool: Product[] }) {
   const [rel, setRel] = useState<Product[]>([]);
   const [openDesc, setOpenDesc] = useState(false);
   const [allRv, setAllRv] = useState(false);
   const [idx, setIdx] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const { categories } = useSite();
-  useEffect(() => {
-    setP(undefined); setRel([]); setOpenDesc(false); setAllRv(false); setIdx(0);
-    getItem<Product>('products', id).then((prod) => {
-      setP(prod);
-      if (prod) trackProductView(prod.id);
-      if (prod) listCol<Product>('products', true).then((l) => setRel(pickRecommendations(l.filter((x) => x.id !== prod.id)))).catch(() => {});
-    });
-  }, [id]);
-  if (p === undefined) return <div className="wrap"><div className="spin" /></div>;
-  if (!p) return <div className="wrap center"><h1>Produk tidak ditemukan</h1><Link className="btn" href="/">Kembali ke Beranda</Link></div>;
+  useEffect(() => { setRel(pickRecommendations(pool)); lazyTrack.view(p.id); }, [pool, p.id]);
 
   const d = discount(p);
   const now = d > 0 ? p.promoPrice : p.price;
@@ -48,7 +37,7 @@ export default function ProductView({ id }: { id: string }) {
   const links = [p.affiliateUrl && { k: 'shp', label: 'Shopee', href: p.affiliateUrl }, p.tiktokUrl && { k: 'tt', label: 'TikTok', href: p.tiktokUrl }]
     .filter(Boolean) as { k: string; label: string; href: string }[];
   const mk = (short: boolean) => links.map((l) => (
-    <a key={l.k} className={`btn-buy ${l.k}`} onClick={() => trackClick(p.id, l.k === 'tt' ? 'tiktok' : 'shopee')} href={l.href} target="_blank" rel="noopener noreferrer sponsored">
+    <a key={l.k} className={`btn-buy ${l.k}`} onClick={() => lazyTrack.click(p.id, l.k === 'tt' ? 'tiktok' : 'shopee')} href={l.href} target="_blank" rel="noopener noreferrer sponsored">
       {l.k === 'shp' ? <ShopeeIcon /> : <TikTokIcon />}
       <span>{links.length === 1 || !short ? `Cek Diskon di ${l.k === 'tt' ? 'TikTok' : 'Shopee'}` : `Diskon ${l.label}`}</span>
     </a>
@@ -68,7 +57,7 @@ export default function ProductView({ id }: { id: string }) {
             <div className="g-track" ref={trackRef} onScroll={(e) => setIdx(Math.round(e.currentTarget.scrollLeft / (e.currentTarget.clientWidth || 1)))}>
               {imgs.map((src, i) => (
                 <div className="g-slide" key={src + i}>
-                  <Img src={src} alt={`${p.name} – foto ${i + 1}`} w={1024} sizes="(max-width:800px) 100vw, 480px" loading={i === 0 ? 'eager' : 'lazy'} />
+                  <Img src={src} alt={`${p.name} – foto ${i + 1}`} w={1024} sizes="(max-width:800px) 100vw, 480px" loading={i === 0 ? 'eager' : 'lazy'} fetchPriority={i === 0 ? 'high' : undefined} />
                 </div>
               ))}
             </div>

@@ -1,70 +1,66 @@
 'use client';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { byNewest, listCol } from '@/lib/db';
-import { Product } from '@/lib/types';
+import { Banner, Product } from '@/lib/types';
 import ProductCard from './ProductCard';
 import BannerSlider from './BannerSlider';
 import CategoryStrip from './CategoryStrip';
 import { useSite } from './SiteProvider';
 
 const TITLES: Record<string, string> = { terbaru: 'Produk Terbaru', populer: 'Produk Populer', rekomendasi: 'Produk Rekomendasi' };
+type Props = { products: Product[]; banners: Banner[] };
 
-export default function HomeClient() {
+const pick = (all: Product[], k: string) => (k === 'populer' ? all.filter((p) => p.popular) : k === 'rekomendasi' ? all.filter((p) => p.recommended) : all);
+const Grid = ({ items }: { items: Product[] }) => <div className="grid">{items.map((p) => <ProductCard key={p.id} p={p} />)}</div>;
+
+// Tampilan beranda bawaan: sudah berisi data dari server (tidak perlu menunggu JavaScript).
+function Home({ products, banners }: Props) {
+  const populer = pick(products, 'populer');
+  return (
+    <>
+      <BannerSlider banners={banners} />
+      <div className="wrap quick">
+        <Link href="/populer" className="q"><span>🔥</span><div><b>Produk Populer</b><small>Produk favorit</small></div></Link>
+        <Link href="/rekomendasi" className="q q2"><span>⭐</span><div><b>Rekomendasi</b><small>Pilihan terbaik kami</small></div></Link>
+      </div>
+      {populer.length > 0 && (
+        <section className="wrap sec">
+          <div className="pop-box">
+            <div className="row"><h2>🔥 Produk Populer</h2><Link href="/populer" className="more">Lihat semua →</Link></div>
+            <div className="hscroll">{populer.slice(0, 12).map((p) => <ProductCard key={p.id} p={p} />)}</div>
+          </div>
+        </section>
+      )}
+      <CategoryStrip />
+      {!products.length && <p className="wrap muted sec">Belum ada produk. Owner dapat menambahkannya lewat /admin.</p>}
+      {products.length > 0 && (
+        <section className="wrap sec">
+          <div className="row"><h2>Produk Terbaru</h2>{products.length > 8 && <Link href="/?sec=terbaru" className="more">Lihat semua →</Link>}</div>
+          <Grid items={products.slice(0, 8)} />
+        </section>
+      )}
+    </>
+  );
+}
+
+function Switch(props: Props) {
   const sp = useSearchParams();
   const { categories } = useSite();
   const q = (sp.get('q') || '').toLowerCase();
   const cat = sp.get('cat') || '';
   const sec = sp.get('sec') || '';
-  const [all, setAll] = useState<Product[] | null>(null);
-  const [failed, setFailed] = useState(false);
-  useEffect(() => {
-    listCol<Product>('products', true).then((l) => setAll(l.sort(byNewest))).catch(() => { setFailed(true); setAll([]); });
-  }, []);
-
-  if (!all) return <div className="wrap grid sk">{Array.from({ length: 8 }).map((_, i) => <div key={i} className="card skel" />)}</div>;
-  const pick = (k: string) => (k === 'populer' ? all.filter((p) => p.popular) : k === 'rekomendasi' ? all.filter((p) => p.recommended) : all);
-
-  if (q || cat || TITLES[sec]) {
-    const base = TITLES[sec] && !q && !cat ? pick(sec) : all;
-    const r = base.filter((p) => (!cat || p.categoryId === cat) && (!q || p.name.toLowerCase().includes(q)));
-    const title = q ? `Hasil untuk “${q}”` : cat ? categories.find((c) => c.id === cat)?.name || 'Kategori' : TITLES[sec];
-    return (
-      <section className="wrap sec"><h2>{title}</h2>
-        {r.length ? <div className="grid">{r.map((p) => <ProductCard key={p.id} p={p} />)}</div> : <p className="muted">Produk tidak ditemukan.</p>}
-      </section>
-    );
-  }
-  const Section = ({ k }: { k: string }) => {
-    const items = pick(k);
-    if (!items.length) return null;
-    return (
-      <section className="wrap sec">
-        <div className="row"><h2>{TITLES[k]}</h2>{items.length > 8 && <Link href={`/?sec=${k}`} className="more">Lihat semua →</Link>}</div>
-        <div className="grid">{items.slice(0, 8).map((p) => <ProductCard key={p.id} p={p} />)}</div>
-      </section>
-    );
-  };
+  if (!(q || cat || TITLES[sec])) return <Home {...props} />;
+  const base = TITLES[sec] && !q && !cat ? pick(props.products, sec) : props.products;
+  const r = base.filter((p) => (!cat || p.categoryId === cat) && (!q || p.name.toLowerCase().includes(q)));
+  const title = q ? `Hasil untuk “${q}”` : cat ? categories.find((c) => c.id === cat)?.name || 'Kategori' : TITLES[sec];
   return (
-    <>
-      <BannerSlider />
-      <div className="wrap quick">
-        <Link href="/populer" className="q"><span>🔥</span><div><b>Produk Populer</b><small>Produk favorit</small></div></Link>
-        <Link href="/rekomendasi" className="q q2"><span>⭐</span><div><b>Rekomendasi</b><small>Pilihan terbaik kami</small></div></Link>
-      </div>
-      {pick('populer').length > 0 && (
-        <section className="wrap sec">
-          <div className="pop-box">
-            <div className="row"><h2>🔥 Produk Populer</h2><Link href="/populer" className="more">Lihat semua →</Link></div>
-            <div className="hscroll">{pick('populer').slice(0, 12).map((p) => <ProductCard key={p.id} p={p} />)}</div>
-          </div>
-        </section>
-      )}
-      <CategoryStrip />
-      {failed && <p className="wrap err">Gagal memuat data. Periksa konfigurasi Firebase dan Firestore Rules.</p>}
-      {!all.length && !failed && <p className="wrap muted sec">Belum ada produk. Owner dapat menambahkannya lewat /admin.</p>}
-      <Section k="terbaru" />
-    </>
+    <section className="wrap sec"><h2>{title}</h2>
+      {r.length ? <Grid items={r} /> : <p className="muted">Produk tidak ditemukan.</p>}
+    </section>
   );
+}
+
+export default function HomeClient(props: Props) {
+  return <Suspense fallback={<Home {...props} />}><Switch {...props} /></Suspense>;
 }
