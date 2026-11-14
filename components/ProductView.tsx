@@ -54,7 +54,7 @@ export default function ProductView({ product: p, pool }: { product: Product; po
       <div className="wrap detail">
         <div className="d-gal">
           <div className="d-img">
-            <div className="g-track" ref={trackRef} onScroll={(e) => setIdx(Math.round(e.currentTarget.scrollLeft / (e.currentTarget.clientWidth || 1)))}>
+            <div className="g-track" ref={trackRef} tabIndex={0} role="region" aria-label="Foto produk" onScroll={(e) => setIdx(Math.round(e.currentTarget.scrollLeft / (e.currentTarget.clientWidth || 1)))}>
               {imgs.map((src, i) => (
                 <div className="g-slide" key={src + i}>
                   <Img src={src} alt={`${p.name} – foto ${i + 1}`} w={1024} sizes="(max-width:800px) 100vw, 480px" loading={i === 0 ? 'eager' : 'lazy'} fetchPriority={i === 0 ? 'high' : undefined} />
@@ -91,16 +91,16 @@ export default function ProductView({ product: p, pool }: { product: Product; po
               <li>🛡️ Pembayaran &amp; pengiriman diproses langsung oleh platform pilihanmu</li>
               <li>🔗 Link resmi menuju halaman produk{links.length > 1 ? ' di Shopee atau TikTok' : ''}</li>
             </ul>
-            <div className="choose"><h4>Pilih tempat beli</h4>{mk(false)}</div>
+            <div className="choose"><p className="ch-t">Pilih tempat beli</p>{mk(false)}</div>
           </div>
           <div className="box">
-            <h3>Deskripsi Produk</h3>
+            <h2>Deskripsi Produk</h2>
             <p className={'desc' + (long && !openDesc ? ' clamp' : '')}>{desc}</p>
             {long && <button type="button" className="more-btn" onClick={() => setOpenDesc((v) => !v)} aria-expanded={openDesc}>{openDesc ? 'Tutup ▴' : 'Lihat Selengkapnya ▾'}</button>}
           </div>
           {(rv.length > 0 || avg > 0) && (
             <div className="box">
-              <h3>Ulasan Terbaru</h3>
+              <h2>Ulasan Terbaru</h2>
               {avg > 0 && <div className="rv-sum"><b>{avg.toFixed(1)}</b><div><Stars value={avg} size="1.1rem" /><br /><small className="muted">{rc > 0 ? `${formatCount(rc)} penilaian` : 'dari 5'}</small></div></div>}
               {shownRv.map((r, i) => (
                 <div className="rv" key={i}>

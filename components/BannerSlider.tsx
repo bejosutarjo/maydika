@@ -23,7 +23,7 @@ export default function BannerSlider({ banners }: { banners: Banner[] }) {
             : null;
           return (
             <div key={b.id} className={'slide' + (n === i ? ' on' : '')} aria-hidden={n !== i}>
-              {img && (b.link ? <a href={b.link} target="_blank" rel="noopener noreferrer sponsored">{img}</a> : img)}
+              {img && (b.link ? <a href={b.link} tabIndex={n === i ? 0 : -1} target="_blank" rel="noopener noreferrer sponsored">{img}</a> : img)}
             </div>
           );
         })}

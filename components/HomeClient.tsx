@@ -16,9 +16,11 @@ const Grid = ({ items }: { items: Product[] }) => <div className="grid">{items.m
 
 // Tampilan beranda bawaan: sudah berisi data dari server (tidak perlu menunggu JavaScript).
 function Home({ products, banners }: Props) {
+  const { settings } = useSite();
   const populer = pick(products, 'populer');
   return (
     <>
+      <h1 className="sr-only">{settings.siteName} – rekomendasi produk Shopee &amp; TikTok Shop</h1>
       <BannerSlider banners={banners} />
       <div className="wrap quick">
         <Link href="/populer" className="q"><span>🔥</span><div><b>Produk Populer</b><small>Produk favorit</small></div></Link>
