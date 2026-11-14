@@ -19,7 +19,7 @@ export default function BannerSlider({ banners }: { banners: Banner[] }) {
       <div className="slider">
         {banners.map((b, n) => {
           const img = seen.includes(n)
-            ? <Img src={b.image} alt={b.title || 'Banner'} w={1024} sizes="(max-width:1200px) 100vw, 1200px" loading={n === 0 ? 'eager' : 'lazy'} fetchPriority={n === 0 ? 'high' : undefined} />
+            ? <Img src={b.image} alt={b.title || 'Banner'} w={800} ratio={0.5} sizes="(max-width:1200px) 100vw, 1200px" loading={n === 0 ? 'eager' : 'lazy'} fetchPriority={n === 0 ? 'high' : undefined} />
             : null;
           return (
             <div key={b.id} className={'slide' + (n === i ? ' on' : '')} aria-hidden={n !== i}>

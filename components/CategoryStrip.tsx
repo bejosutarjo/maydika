@@ -24,11 +24,10 @@ export default function CategoryStrip() {
     <section className="wrap sec cat-sec">
       <div className="row">
         <h2>Kategori</h2>
-        {(canExpand || open) && (
-          <button type="button" className="more" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
-            {open ? 'Tutup ▴' : 'Lihat semuanya ▾'}
-          </button>
-        )}
+        {/* tombol selalu ada (disembunyikan bila tidak perlu) agar tinggi baris tidak berubah setelah hydration */}
+        <button type="button" className="more" style={{ visibility: canExpand || open ? 'visible' : 'hidden' }} tabIndex={canExpand || open ? 0 : -1} aria-hidden={!(canExpand || open)} onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+          {open ? 'Tutup ▴' : 'Lihat semuanya ▾'}
+        </button>
       </div>
       <div ref={ref} className={'catgrid' + (open ? '' : ' fold')}>
         {categories.map((c) => (

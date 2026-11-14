@@ -23,7 +23,7 @@ export default function Header() {
         )}
         <Link href="/" className="logo" aria-label={settings.siteName}>
           <span className="logo-chip">
-            {settings.logo ? <Img src={settings.logo} alt="" w={160} sizes="96px" loading="eager" /> : <span className="logo-mark">M</span>}
+            {settings.logo ? <Img src={settings.logo} alt="" w={160} ratio={0.75} sizes="96px" loading="eager" /> : <span className="logo-mark">M</span>}
           </span>
           <span className="logo-txt"><b>{settings.siteName}</b><small>Rekomendasi produk pilihan</small></span>
         </Link>
