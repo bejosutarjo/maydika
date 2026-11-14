@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const p = await fetchProduct(id);
   if (!p) return { title: 'Produk' };
   const desc = String(p.description || '').slice(0, 160);
-  const img = p.image && !String(p.image).startsWith('data:') ? [optimize(p.image, 1200)] : undefined;
+  const img = p.image && !String(p.image).startsWith('data:') ? [optimize(p.image, 1200)] : ['/og-banner.jpg'];
   return { title: p.name, description: desc, alternates: { canonical: `/produk/${id}` }, openGraph: { title: p.name, description: desc, images: img, type: 'website' } };
 }
 
