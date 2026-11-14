@@ -9,10 +9,10 @@ export function isShopeeUrl(u: string) {
 }
 export function optimize(url: string, w: number) {
   return url.includes('res.cloudinary.com') && url.includes('/upload/')
-    ? url.replace('/upload/', `/upload/f_auto,q_auto,c_limit,w_${w}/`) : url;
+    ? url.replace('/upload/', `/upload/f_auto,q_auto${w <= 800 ? ':eco' : ''},c_limit,w_${w}/`) : url;
 }
 export function srcSet(url: string) {
-  return url.includes('res.cloudinary.com') ? [320, 640, 1024, 1600].map((w) => `${optimize(url, w)} ${w}w`).join(', ') : undefined;
+  return url.includes('res.cloudinary.com') ? [320, 480, 640, 800, 1024, 1600].map((w) => `${optimize(url, w)} ${w}w`).join(', ') : undefined;
 }
 export const placeholder = (label: string, c1 = '#F4511E', c2 = '#FF7A00') =>
   'data:image/svg+xml;utf8,' + encodeURIComponent(
