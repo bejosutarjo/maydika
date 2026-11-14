@@ -9,10 +9,11 @@ export type Banner = { id: string; title: string; image: string; link: string; o
 export type Settings = {
   siteName: string; description: string; logo: string; whatsapp: string;
   instagram: string; facebook: string; tiktok: string; youtube: string; terms: string;
+  detail: string; // 'on' = halaman detail produk aktif, 'off' = kartu langsung membuka Shopee/TikTok
 };
 export const DEFAULT_SETTINGS: Settings = {
   siteName: 'MAYDIKA AFFILIATE',
   description: 'Rekomendasi produk pilihan dengan harga terbaik, langsung ke Shopee dan TikTok Shop.',
-  logo: '', whatsapp: '', instagram: '', facebook: '', tiktok: '', youtube: '',
+  detail: 'off', logo: '', whatsapp: '', instagram: '', facebook: '', tiktok: '', youtube: '',
   terms: 'Situs ini adalah media afiliasi. Kami tidak memproses pembayaran. Pembelian dilakukan di Shopee atau TikTok Shop dan tunduk pada ketentuan masing-masing platform. Harga dan ketersediaan dapat berubah sewaktu-waktu. Kami dapat menerima komisi dari pembelian melalui tautan di situs ini.',
 };
