@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import ProductView from '@/components/ProductView';
-import { fetchProduct, fetchProducts, slim } from '@/lib/server';
+import { fetchProduct, fetchProducts, fetchSettings, slim } from '@/lib/server';
 import { optimize } from '@/lib/util';
 import type { Product } from '@/lib/types';
 
@@ -19,6 +19,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const { id } = await params;
+  const settings = await fetchSettings();
+  if (settings?.detail !== 'on') redirect('/'); // halaman detail dinonaktifkan di Pengaturan
   const [product, all] = await Promise.all([fetchProduct(id), fetchProducts()]);
   if (!product) notFound();
   // Kumpulan kecil untuk rekomendasi acak di browser (Rekomendasi diutamakan).
