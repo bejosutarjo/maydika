@@ -16,7 +16,7 @@ export default function Header() {
   return (
     <header className={'hdr' + (isProduct ? ' hdr-prod' : '')}>
       <div className="wrap hdr-in">
-        {isProduct && (
+        {path !== '/' && (
           <button type="button" className="hdr-back" onClick={goBack} aria-label="Kembali">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
           </button>
