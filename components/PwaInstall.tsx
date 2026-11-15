@@ -24,7 +24,7 @@ export default function PwaInstall() {
     let dismissed = false;
     try { dismissed = Date.now() - Number(localStorage.getItem(KEY) || 0) < 7 * 86400e3; } catch { /* abaikan */ }
     const timers: ReturnType<typeof setTimeout>[] = [];
-    const on = (e: Event) => { e.preventDefault(); setEvt(e as BIP); if (!dismissed) timers.push(setTimeout(() => setShow(true), 6000)); };
+    const on = (e: Event) => { e.preventDefault(); (window as unknown as { __bip?: Event }).__bip = e; setEvt(e as BIP); if (!dismissed) timers.push(setTimeout(() => setShow(true), 6000)); };
     const done = () => { setShow(false); setEvt(null); };
     window.addEventListener('beforeinstallprompt', on);
     window.addEventListener('appinstalled', done);
@@ -32,7 +32,7 @@ export default function PwaInstall() {
     return () => { timers.forEach(clearTimeout); window.removeEventListener('beforeinstallprompt', on); window.removeEventListener('appinstalled', done); };
   }, []);
 
-  if (!show || (!evt && !ios) || path?.startsWith('/admin') || path?.startsWith('/produk/')) return null;
+  if (!show || (!evt && !ios) || path?.startsWith('/admin') || path?.startsWith('/produk/') || path === '/install') return null;
   const dismiss = () => { try { localStorage.setItem(KEY, String(Date.now())); } catch { /* abaikan */ } setShow(false); };
   const install = async () => { if (!evt) return; await evt.prompt(); await evt.userChoice; setEvt(null); setShow(false); };
   return (

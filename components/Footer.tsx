@@ -24,6 +24,7 @@ export default function Footer() {
           <Link href="/">Beranda</Link>
           <Link href="/populer">Populer</Link>
           <Link href="/rekomendasi">Rekomendasi</Link>
+          <Link href="/install">Pasang Aplikasi</Link>
           <Link href="/syarat">Syarat &amp; Ketentuan</Link>
         </nav>
         {socials.length > 0 && (
