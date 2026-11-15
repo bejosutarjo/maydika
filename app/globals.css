@@ -354,3 +354,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .pwa-bar>div{flex:1;min-width:0}.pwa-bar b{display:block;font-size:.88rem;line-height:1.2}.pwa-bar small{display:block;font-size:.72rem;color:#e5e5e5;line-height:1.3}
 .pwa-go{flex:none;background:var(--o);color:#fff;border:0;border-radius:999px;padding:9px 16px;font:inherit;font-weight:700;font-size:.85rem;cursor:pointer}
 .pwa-x{flex:none;background:none;border:0;color:#fff;font-size:1.1rem;min-width:32px;min-height:32px;cursor:pointer}
+
+/* ===== v19: halaman /install ===== */
+.inst{max-width:480px;margin:12px auto;background:#fff;border-radius:18px;padding:22px 18px;box-shadow:var(--sh);text-align:center;display:grid;gap:12px;justify-items:center}
+.inst img{border-radius:22px;box-shadow:0 6px 18px rgba(0,0,0,.15)}.inst h1{margin:0;font-size:1.3rem}.inst p{margin:0}
+.inst-ben{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:.9rem;text-align:left}
+.inst-btn{width:100%;background:linear-gradient(135deg,var(--o),var(--o2));color:#fff;border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;font-size:1.05rem;cursor:pointer;box-shadow:0 8px 20px rgba(196,58,9,.35)}
+.inst-ok{color:#1b6e2d;font-weight:700}
+.inst-steps{text-align:left;margin:0;padding-left:20px;display:grid;gap:8px;font-size:.92rem;background:#fff8f4;border-radius:12px;padding:12px 12px 12px 32px;width:100%}
