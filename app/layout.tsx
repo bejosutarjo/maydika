@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import { preconnect } from 'react-dom';
 import SiteProvider from '@/components/SiteProvider';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Tracker from '@/components/Tracker';
 import PwaInstall from '@/components/PwaInstall';
+import AppTabBar from '@/components/AppTabBar';
 import { fetchCategories, fetchSettings, siteUrl, slimCategory, slimSettings } from '@/lib/server';
 import { DEFAULT_SETTINGS } from '@/lib/types';
 
@@ -23,10 +23,9 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: { card: 'summary_large_image', title: name, description: desc, images: ['/og-banner.jpg'] },
   };
 }
-export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#C43A09' };
+export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#C43A09', viewportFit: 'cover' };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  preconnect('https://res.cloudinary.com'); // gambar Cloudinary mulai tersambung lebih awal
   const [s, cats] = await Promise.all([fetchSettings(), fetchCategories()]);
   // Data terstruktur agar Google mengenali nama situs, logo, dan gambar utama.
   const base = siteUrl();
@@ -41,10 +40,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   };
   return (
     <html lang="id">
+      <head><link rel="preconnect" href="https://res.cloudinary.com" /></head>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replace(/</g, '\\u003c') }} />
         <SiteProvider initialSettings={slimSettings(s)} initialCategories={cats.map(slimCategory)}>
-          <Tracker /><PwaInstall /><Header /><main>{children}</main><Footer />
+          <Tracker /><PwaInstall /><Header /><main>{children}</main><Footer /><AppTabBar />
         </SiteProvider>
       </body>
     </html>

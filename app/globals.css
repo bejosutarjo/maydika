@@ -362,3 +362,23 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .inst-btn{width:100%;background:linear-gradient(135deg,var(--o),var(--o2));color:#fff;border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;font-size:1.05rem;cursor:pointer;box-shadow:0 8px 20px rgba(196,58,9,.35)}
 .inst-ok{color:#1b6e2d;font-weight:700}
 .inst-steps{text-align:left;margin:0;padding-left:20px;display:grid;gap:8px;font-size:.92rem;background:#fff8f4;border-radius:12px;padding:12px 12px 12px 32px;width:100%}
+
+/* ===== v20: tampilan ala aplikasi native (hanya saat dibuka dari aplikasi terpasang) ===== */
+.app-tabs{display:none}
+@media (display-mode: standalone){
+  html,body{overscroll-behavior-y:none}
+  body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-text-size-adjust:100%}
+  input,textarea,.desc,.rv p,.f-desc{-webkit-user-select:text;user-select:text}
+  img,a{-webkit-user-drag:none;-webkit-touch-callout:none}
+  main>*{animation:pgin .22s ease-out}
+  body:has(.app-tabs) main{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
+  .app-tabs{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;background:#fff;box-shadow:0 -2px 16px rgba(0,0,0,.14);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+  .app-tabs a,.app-tabs button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;font:inherit;font-size:.68rem;color:#666;background:none;border:0;cursor:pointer;transition:color .15s,transform .1s}
+  .app-tabs a:active,.app-tabs button:active{transform:scale(.92)}
+  .app-tabs .on{color:var(--ot);font-weight:700}
+  .app-tabs .on svg{stroke-width:2.6}
+  .hdr-back{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:50%;border:0;background:rgba(0,0,0,.22);color:#fff;cursor:pointer}
+  .hdr-back:active{background:rgba(0,0,0,.35)}
+  .pwa-bar{display:none}
+}
+@keyframes pgin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
