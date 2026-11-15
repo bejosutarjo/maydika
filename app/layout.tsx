@@ -5,6 +5,7 @@ import SiteProvider from '@/components/SiteProvider';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Tracker from '@/components/Tracker';
+import PwaInstall from '@/components/PwaInstall';
 import { fetchCategories, fetchSettings, siteUrl, slimCategory, slimSettings } from '@/lib/server';
 import { DEFAULT_SETTINGS } from '@/lib/types';
 
@@ -17,11 +18,12 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: `${name} – Rekomendasi Produk Shopee & TikTok Shop`, template: `%s | ${name}` },
     description: desc,
     openGraph: { title: name, description: desc, siteName: name, locale: 'id_ID', type: 'website', url: '/', images: [{ url: '/og-banner.jpg', width: 1200, height: 630, alt: name }] },
+    appleWebApp: { capable: true, title: 'MAYDIKA', statusBarStyle: 'default' },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 } },
     twitter: { card: 'summary_large_image', title: name, description: desc, images: ['/og-banner.jpg'] },
   };
 }
-export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#F4511E' };
+export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#C43A09' };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   preconnect('https://res.cloudinary.com'); // gambar Cloudinary mulai tersambung lebih awal
@@ -42,7 +44,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replace(/</g, '\\u003c') }} />
         <SiteProvider initialSettings={slimSettings(s)} initialCategories={cats.map(slimCategory)}>
-          <Tracker /><Header /><main>{children}</main><Footer />
+          <Tracker /><PwaInstall /><Header /><main>{children}</main><Footer />
         </SiteProvider>
       </body>
     </html>
