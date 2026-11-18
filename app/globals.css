@@ -382,3 +382,42 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .pwa-bar{display:none}
 }
 @keyframes pgin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ===== v21: warna tema dari Pengaturan, halaman pengaturan admin ===== */
+:root{--hdr:#C43A09;--hdr2:#CF450A;--hdr-fg:#fff;--hdr-chip:rgba(0,0,0,.2);--btn:#C43A09;--btn2:#CF450A;--btn-fg:#fff;--ftr:#C43A09;--ftr2:#8F2807;--ftr-fg:#fff;--ftr-bar:rgba(0,0,0,.2)}
+.hdr{background:linear-gradient(135deg,var(--hdr),var(--hdr2));color:var(--hdr-fg)}
+.logo,.logo-txt b,.logo-txt small{color:var(--hdr-fg)}
+.cats a{color:var(--hdr-fg);background:var(--hdr-chip)}.cats a:hover{background:var(--hdr-fg);color:var(--hdr)}
+.hdr-back,.hdr-prod .hdr-back{background:var(--hdr-chip);color:var(--hdr-fg)}
+.btn,.btn-s.shp,.btn-buy.shp,.inst-btn,.pwa-go,.search button{background:linear-gradient(135deg,var(--btn),var(--btn2));color:var(--btn-fg)}
+.ftr{background:linear-gradient(160deg,var(--ftr),var(--ftr2));color:var(--ftr-fg)}
+.ftr .f-links a,.ftr .f-desc{color:var(--ftr-fg)}
+.ftr .copy{background:var(--ftr-bar);color:var(--ftr-fg)}
+.ftr .soc a{color:var(--ftr2)}
+/* pratinjau di admin */
+.pv{border-radius:12px;overflow:hidden;box-shadow:var(--sh);background:#fff;font-size:.85rem}
+.pv-hdr{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:linear-gradient(135deg,var(--hdr),var(--hdr2));color:var(--hdr-fg)}
+.pv-hdr span{background:linear-gradient(135deg,var(--btn),var(--btn2));color:var(--btn-fg);border-radius:999px;padding:3px 14px;font-weight:700}
+.pv-body{display:flex;gap:8px;flex-wrap:wrap;padding:14px}
+.pv-btn{background:linear-gradient(135deg,var(--btn),var(--btn2));color:var(--btn-fg);border-radius:6px;padding:8px 12px;font-weight:700;font-size:.78rem}.pv-btn.tt{background:#000;color:#fff}
+.pv-ftr{padding:12px 14px;background:linear-gradient(160deg,var(--ftr),var(--ftr2));color:var(--ftr-fg);text-align:center;font-size:.8rem}
+.cf{display:grid;gap:4px}.cf-l{font-weight:600;font-size:.88rem}.cf-in{display:flex;gap:8px;align-items:center}
+.cf-in input[type=color]{width:46px;height:40px;padding:2px;border:1px solid #ddd;border-radius:10px;background:#fff;cursor:pointer}
+.cf-in input[type=text]{flex:1;min-width:0;text-transform:lowercase}.cf-in button{border:1px solid #ddd;background:#fff;border-radius:10px;padding:8px 12px;font:inherit;cursor:pointer}
+.snip{background:#fff;border:1px solid #eee;border-radius:12px;padding:12px;display:grid;gap:2px}.snip small{color:#1e6b34}.snip b{color:#1a0dab;font-size:1.05rem;font-weight:500}.snip p{margin:0;color:#4d5156;font-size:.86rem}
+/* hub & akun */
+.back-link{font-size:.85rem;color:var(--ot);font-weight:600}
+.hub{display:grid;gap:10px}.hub-card{display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;padding:14px;box-shadow:var(--sh);transition:transform .15s}.hub-card:hover{transform:translateY(-2px)}
+.hub-ic{display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:12px;background:#fff1ea;font-size:1.4rem}.hub-card div{flex:1;min-width:0}.hub-card b{display:block}.hub-card small{color:#666;font-size:.78rem}.hub-go{font-size:1.6rem;color:#999}
+.acc-box{display:grid;gap:10px;background:#fff;border-radius:14px;padding:14px;box-shadow:var(--sh)}.acc-box h2{margin:0;font-size:1rem}
+.settings input[type=password],.settings input[type=email]{width:100%;border:1px solid #ddd;border-radius:10px;padding:9px 12px;font:inherit}
+
+/* ===== v22: perbaiki dashboard admin melebar di HP (konten panjang tidak boleh memperlebar halaman) ===== */
+.adm{grid-template-columns:minmax(0,1fr)}
+@media(min-width:600px){.adm{grid-template-columns:230px minmax(0,1fr)}}
+.adm-main,.adm-main>*,.an,.an-sec,.an-sec>*,.an-top,.an-top li,.an-top li>div,.stats,.hub,.settings,.acc-box,.list,.list li>div{min-width:0}
+.an,.an-sec,.hub,.settings{grid-template-columns:minmax(0,1fr)}
+.an-top b,.an-top small{max-width:100%}
+.an-line{max-width:100%;overflow:hidden}
+.an-sug p,.list b,.hub-card small{overflow-wrap:anywhere}
+.adm-root{overflow-x:clip}
